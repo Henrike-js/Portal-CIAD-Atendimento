@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>COPOM 190 – Teleatendimento PMMG</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<header class="page-header">
+  <div class="header-inner">
+    <img src="img/logo.png" class="logo-img logo-index">
+  </div>
+</header>
+
+<div id="app-root" class="d-flex">
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="sidebar-body">
+    <div id="main-menu" class="nav flex-column mt-3">
+      <div class="nav-link active" onclick="showSection('triagem')">🚨 Triagem</div>
+      <div class="nav-link" onclick="showSection('cad')">🧾 CAD</div>
+      <div class="nav-link" onclick="showSection('rechamadas')">🔁 Rechamadas</div>
+      <div class="nav-link" onclick="showSection('pm')">👮 PM</div>
+      <div class="nav-link" onclick="showSection('trote')">❌ Trote</div>
+      <div class="nav-link" onclick="showSection('reclamacao')">📢 Reclamações</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTEÚDO -->
+<div id="main-content" class="p-3 flex-fill">
+
+<div class="card shadow-sm">
+<div class="card-body">
+
+<!-- TRIAGEM -->
+<div id="triagem" class="dynamic-content">
+  <h4 id="question"></h4>
+  <div id="guidance" class="alert alert-primary"></div>
+  <div id="options" class="mb-2"></div>
+  <button class="btn btn-outline-secondary btn-sm" onclick="back()">⬅ Voltar</button>
+
+  <label class="mt-3 fw-bold">📝 Bloco de Notas</label>
+  <textarea id="notepad" class="form-control" rows="7" placeholder="Digite observações do atendente..."></textarea>
+  <div class="mt-2">
+      <button class="btn btn-success btn-sm" onclick="copyNotes()">📋 Copiar</button>
+      <button class="btn btn-danger btn-sm" onclick="clearNotes()">🗑 Limpar</button>
+  </div>
+</div>
+
+<!-- CAD -->
+<div id="cad" class="dynamic-content div-invisivel">
+
+<h4>🧾 Criação de Chamada no CAD</h4>
+
+<div class="alert alert-primary">
+<strong>Objetivo:</strong> Iniciar e registrar a chamada no CAD com dados completos, claros e precisos para permitir o despacho correto das viaturas.
+</div>
+
+<h5>🔹 Início do Registro</h5>
+<ul>
+  <li>Clicar no ícone do <strong>giroflex</strong>.</li>
+  <li>Inserir os dados iniciais da ocorrência.</li>
+  <li>A coleta deve ser <strong>completa, objetiva e precisa</strong>.</li>
+</ul>
+
+<h5>🔹 Dados Essenciais</h5>
+<ul>
+  <li><strong>Solicitante:</strong> Nome (se não informado, registrar como <em>“Anônimo”</em>).</li>
+  <li><strong>Telefone:</strong> Número com DDD. Confirmar sempre.</li>
+  <li><strong>Natureza:</strong> Selecionar a mais adequada no CAD.</li>
+</ul>
+
+<h5>📍 Endereço da Ocorrência</h5>
+<ul>
+  <li>Tipo de logradouro, nome e número.</li>
+  <li>Complemento, bairro e município.</li>
+  <li>Rodovias: KM, sentido e via principal ou marginal.</li>
+</ul>
+
+<h5>🔹 Referências</h5>
+<ul>
+  <li>Bairros vizinhos e pontos notáveis.</li>
+</ul>
+
+<h5>🔹 Outros</h5>
+<ul>
+  <li>Envolvimento de militar.</li>
+  <li>Ocorrência de destaque.</li>
+</ul>
+
+</div>
+
+<!-- RECHAMADAS -->
+<div id="rechamadas" class="dynamic-content div-invisivel">
+
+<h4>🔁 Rechamadas</h4>
+
+<div class="alert alert-primary">
+<strong>Contexto:</strong> O sistema identifica rechamadas pelo telefone ativo ou alerta de “Chamadas Similares”.
+</div>
+
+<h5>Procedimento Geral</h5>
+<ul>
+<li>Clicar em <strong>Chamadas Similares</strong>.</li>
+<li>Ocorrência diferente → criar nova chamada.</li>
+</ul>
+
+<h5>Ocorrência em andamento</h5>
+<ul>
+<li>Atualizar dados da chamada.</li>
+<li>Incluir nome e telefone do solicitante.</li>
+<li>Informar: <em>“Sua nova solicitação foi registrada, estamos empenhando viatura.”</em></li>
+<li>Qualificar como <strong>Outros &gt; Rechamada</strong>.</li>
+</ul>
+
+<h5>Despacho tentou contato</h5>
+<ul>
+<li>Solicitar que aguarde.</li>
+<li>Confirmar com o Despacho.</li>
+<li>Transferir após registrar dados.</li>
+</ul>
+
+<h5>Atraso sem viatura</h5>
+<ul>
+<li>Informar que o atendimento segue prioridade.</li>
+</ul>
+
+<h5>Atraso com viatura</h5>
+<ul>
+<li>Informar que há viatura a caminho.</li>
+<li>Registrar no histórico.</li>
+<li>Transferir ao Supervisor do COPOM.</li>
+</ul>
+
+</div>
+
+<!-- PM -->
+<div id="pm" class="dynamic-content div-invisivel">
+  <h4>PM na Linha</h4>
+  <p>Emergência → Transferir ao Despacho.</p>
+</div>
+
+<!-- TROTE -->
+<div id="trote" class="dynamic-content div-invisivel">
+  <h4>Trote</h4>
+  <pre>ESTA É UMA LINHA PARA EMERGÊNCIA. SUA LIGAÇÃO SERÁ ENCERRADA.</pre>
+</div>
+
+<!-- RECLAMAÇÃO -->
+<div id="reclamacao" class="dynamic-content div-invisivel">
+  <h4>Reclamações</h4>
+  <p>Flagrante → U 50.002</p>
+</div>
+
+</div>
+</div>
+
+</div>
+</div>
+
+<script>
+const tree = {
+
+1:{
+q:"CENTO E NOVENTA. QUAL É A SUA EMERGÊNCIA?",
+g:"Coletar: fato, endereço, autor, vítimas, armas, veículos, risco imediato.",
+o:[
+ {text:"Crime em andamento",n:10},
+ {text:"Violência doméstica",n:20},
+ {text:"Pessoa armada / ameaça",n:30},
+ {text:"Roubo / furto / veículo",n:40},
+ {text:"Invasão de domicílio",n:50},
+ {text:"Disparo de arma de fogo",n:60},
+ {text:"Pessoa suspeita",n:70},
+ {text:"Pessoa desaparecida",n:80},
+ {text:"Mandado de prisão",n:90},
+ {text:"Tentativa de suicídio",n:100},
+ {text:"Informações / orientação",n:300},
+ {text:"Trote",n:400}
+]},
+
+// CRIME EM ANDAMENTO
+10:{
+q:"O fato está acontecendo agora?",
+g:"Se flagrante, prioridade máxima.",
+o:[
+ {text:"Sim",n:11},
+ {text:"Já terminou",n:200}
+]},
+11:{
+q:"O autor está no local?",
+g:"Fundamental para abordagem.",
+o:[
+ {text:"Sim",n:12},
+ {text:"Fugiu agora",n:13}
+]},
+12:{
+q:"O autor está armado?",
+g:"Arma de fogo, faca, objeto.",
+o:[
+ {text:"Sim",n:14},
+ {text:"Não",n:14}
+]},
+14:{
+q:"Há vítimas?",
+g:"Feridos, rendidos ou ameaçados.",
+o:[
+ {text:"Sim",n:150},
+ {text:"Não",n:150}
+]},
+
+// VIOLÊNCIA DOMÉSTICA
+20:{
+q:"A agressão está acontecendo agora?",
+g:"Sempre prioridade máxima.",
+o:[
+ {text:"Sim",n:21},
+ {text:"Já ocorreu",n:22}
+]},
+21:{
+q:"Há crianças ou idosos no local?",
+g:"Risco elevado.",
+o:[
+ {text:"Sim",n:150},
+ {text:"Não",n:150}
+]},
+22:{
+q:"A vítima está em risco agora?",
+g:"Se risco, tratar como flagrante.",
+o:[
+ {text:"Sim",n:150},
+ {text:"Não",n:200}
+]},
+
+// PESSOA ARMADA
+30:{
+q:"A pessoa está ameaçando alguém?",
+g:"Apontando arma ou intimidando.",
+o:[
+ {text:"Sim",n:150},
+ {text:"Não",n:31}
+]},
+31:{
+q:"A pessoa está em local público?",
+g:"Rua, escola, bar.",
+o:[
+ {text:"Sim",n:150},
+ {text:"Não",n:150}
+]},
+
+// ROUBO / FURTO / VEÍCULO
+40:{
+q:"O crime acabou de ocorrer?",
+g:"Chance de abordagem.",
+o:[
+ {text:"Sim",n:41},
+ {text:"Não",n:200}
+]},
+41:{
+q:"O autor ou veículo ainda está próximo?",
+g:"Rota de fuga.",
+o:[
+ {text:"Sim",n:150},
+ {text:"Não",n:200}
+]},
+
+// INVASÃO
+50:{
+q:"O autor está dentro do imóvel?",
+g:"Situação crítica.",
+o:[
+ {text:"Sim",n:150},
+ {text:"Não",n:200}
+]},
+
+// DISPAROS
+60:{
+q:"Os disparos foram agora?",
+g:"Indica risco extremo.",
+o:[
+ {text:"Sim",n:150},
+ {text:"Não",n:200}
+]},
+
+// SUSPEITO
+70:{
+q:"A pessoa está tentando cometer crime?",
+g:"Ronda, tentativa de furto.",
+o:[
+ {text:"Sim",n:150},
+ {text:"Não",n:200}
+]},
+
+// DESAPARECIDO
+80:{
+q:"É menor de idade ou idoso?",
+g:"Prioridade maior.",
+o:[
+ {text:"Sim",n:150},
+ {text:"Não",n:200}
+]},
+
+// MANDADO
+90:{
+q:"Você sabe onde o procurado está agora?",
+g:"Permite prisão em flagrante.",
+o:[
+ {text:"Sim",n:150},
+ {text:"Não",n:200}
+]},
+
+// SUICÍDIO
+100:{
+q:"A pessoa está em risco imediato?",
+g:"Tentativa em andamento.",
+o:[
+ {text:"Sim",n:150},
+ {text:"Não",n:200}
+]},
+
+// DESPACHO
+150:{
+q:"DESPACHO POLICIAL",
+g:"Criar CAD, marcar ALERTA, coletar todos os dados e acionar viaturas.",
+o:[]
+},
+
+// FATO PRETÉRITO
+200:{
+q:"Fato não está em andamento",
+g:"Orientar registro de ocorrência.",
+o:[]
+},
+
+// INFORMAÇÃO
+300:{
+q:"Não se trata de emergência",
+g:"Fornecer orientação.",
+o:[]
+},
+
+// TROTE
+400:{
+q:"Trote",
+g:"Encerrar e registrar.",
+o:[]
+}
+
+};
+
+
+
+let stack=[],cur=1;
+function render(){
+const n=tree[cur];
+question.innerText=n.q;
+guidance.innerText=n.g;
+options.innerHTML="";
+n.o.forEach(o=>{
+let b=document.createElement("button");
+b.className="btn btn-primary btn-sm me-1 mb-1";
+b.innerText=o.text;
+b.onclick=()=>{notepad.value+=n.q+" → "+o.text+"\n";stack.push(cur);cur=o.n;render();};
+options.appendChild(b);
+});
+}
+function back(){if(stack.length){cur=stack.pop();render();}}
+function showSection(id){
+document.querySelectorAll(".dynamic-content").forEach(s=>s.classList.add("div-invisivel"));
+document.getElementById(id).classList.remove("div-invisivel");
+document.querySelectorAll("#main-menu .nav-link").forEach(l=>l.classList.remove("active"));
+document.querySelector(`#main-menu .nav-link[onclick*="${id}"]`).classList.add("active");
+}
+function copyNotes(){notepad.select();document.execCommand("copy");}
+function clearNotes(){if(confirm("Limpar bloco de notas?"))notepad.value="";}
+window.onload=()=>{notepad.value="";render();}
+</script>
+
+</body>
+</html>
+
+

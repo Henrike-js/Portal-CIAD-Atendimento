@@ -1,0 +1,23 @@
+-CREATE TABLE registros_chamadas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    matricula VARCHAR(20),
+    nome_teleatendente VARCHAR(120),
+    data_atendimento DATE,
+    hora_atendimento TIME,
+    destino_servico VARCHAR(50),
+    logradouro_chamada VARCHAR(255),
+    numero_chamada VARCHAR(20),
+    complemento_chamada VARCHAR(100),
+    bairro_chamada VARCHAR(120),
+    municipio_chamada VARCHAR(120),
+    telefone_chamada VARCHAR(20),
+    nome_solicitante VARCHAR(120),
+    endereco_solicitante VARCHAR(255),
+    numero_solicitante VARCHAR(20),
+    complemento_solicitante VARCHAR(100),
+    bairro_solicitante VARCHAR(120),
+    municipio_solicitante VARCHAR(120),
+    telefone_solicitante VARCHAR(20),
+    descricao_natureza TEXT,
+    codigo_natureza VARCHAR(50)
+);
