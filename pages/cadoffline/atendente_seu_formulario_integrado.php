@@ -396,7 +396,7 @@ Nome do Solicitante
 
 <div class="w-100">
     <label>Historico</label>
-    <textarea rows="4" name="descricao_natureza"></textarea>
+    <textarea rows="4" name="historico"></textarea>
 </div>
 
 <div class="row">

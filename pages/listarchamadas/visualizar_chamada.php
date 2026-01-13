@@ -127,7 +127,7 @@ a{display:inline-block;margin-top:12px}
 
 <div class="row"><span class="label">Código natureza:</span> <?= htmlspecialchars($registro['codigo_natureza']) ?></div>
 
-<pre><?= htmlspecialchars($registro['descricao_natureza']) ?></pre>
+<pre><?= htmlspecialchars($registro['historico']) ?></pre>
 </div>
 
 <a href="lista_chamadas.php">⬅ Voltar</a>

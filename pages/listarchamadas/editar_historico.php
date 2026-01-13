@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $novo_texto;
 
         $sql = "UPDATE registros_chamadas 
-                SET descricao_natureza = ?
+                SET historico = ?
                 WHERE id = ?";
 
         $stmt = $conn->prepare($sql);
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // ---- CARREGAR REGISTRO ----
 $id = $_GET['id'];
 
-$sql = "SELECT id, descricao_natureza 
+$sql = "SELECT id,historico 
         FROM registros_chamadas 
         WHERE id = ?";
 
@@ -86,10 +86,10 @@ a{margin-left:10px}
     <input type="hidden" name="id" value="<?= $registro['id'] ?>">
 
     <label>Histórico atual (não pode alterar)</label><br>
-    <textarea readonly rows="8"><?= htmlspecialchars($registro['descricao_natureza']) ?></textarea>
+    <textarea readonly rows="8"><?= htmlspecialchars($registro['historico']) ?></textarea>
 
     <input type="hidden" name="historico_existente" 
-           value="<?= htmlspecialchars($registro['descricao_natureza']) ?>">
+           value="<?= htmlspecialchars($registro['historico']) ?>">
 
     <br><br>
 

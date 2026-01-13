@@ -38,7 +38,7 @@ $bairro_solicitante    = $_POST['bairro_solicitante'] ?? null;
 $municipio_solicitante = $_POST['municipio_solicitante'] ?? null;
 $telefone_solicitante  = $_POST['telefone_solicitante'] ?? null;
 
-$descricao_natureza    = $_POST['descricao_natureza'] ?? null;
+$historico    = $_POST['historico'] ?? null;
 $codigo_natureza       = $_POST['codigo_natureza'] ?? null;
 
 
@@ -62,7 +62,7 @@ $sql = "INSERT INTO registros_chamadas (
             bairro_solicitante,
             municipio_solicitante,
             telefone_solicitante,
-            descricao_natureza,
+            historico,
             codigo_natureza
         )
         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -94,7 +94,7 @@ $stmt->bind_param(
     $bairro_solicitante,
     $municipio_solicitante,
     $telefone_solicitante,
-    $descricao_natureza,
+    $historico,
     $codigo_natureza
 );
 
