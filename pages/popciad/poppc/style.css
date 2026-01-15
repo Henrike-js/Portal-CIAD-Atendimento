@@ -37,7 +37,7 @@ body {
 }
 
 .header-logo {
-  height: 100px; /* 🔹 aqui você altera o tamanho do logo */
+  height: 60px; /* 🔹 aqui você altera o tamanho do logo */
   width: auto;
 }
 

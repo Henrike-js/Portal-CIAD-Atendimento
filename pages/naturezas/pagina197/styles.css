@@ -128,6 +128,6 @@ a > .logo-sisp {
 .logo-sisp img {
   max-width: none !important;
   width: auto !important;
-  height: 100% !important;
+  height: 80% !important;
   display:block !important;
 }

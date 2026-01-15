@@ -7,13 +7,18 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
 
+<script src="roteiros_data.js" onerror="console.log('Arquivo JS não encontrado, aguardando JSON...')"></script>
+
 <style>
 :root{
-  --pm-blue:#1f3a5f;
-  --pm-dark:#142640;
-  --pm-focus:#0d6efd;
-  --pm-bg:#f0f2f5;
-  --pm-alert:#ffc107;
+  /* Identidade Visual PMMG (Azul) */
+  --pm-blue: #003366;       
+  --pm-dark: #001a33;       
+  --pm-light: #e6f0ff;      
+  --pm-focus: #0044cc;      
+  --pm-bg: #f4f6f9;         
+  --pm-alert: #ffc107;      
+  --pm-danger: #dc3545;     
 }
 
 body {
@@ -29,6 +34,7 @@ body {
 .top-header {
     height: 60px;
     background-color: var(--pm-blue);
+    background-image: linear-gradient(to right, #003366, #004080);
     color: white;
     display: flex;
     align-items: center;
@@ -40,7 +46,7 @@ body {
 
 .brand-area { display: flex; align-items: center; gap: 15px; font-size: 1.2rem; font-weight: 700; }
 .logo-top { height: 40px; }
-.system-badge { background: rgba(255,255,255,0.15); padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-left: 10px; }
+.system-badge { background: rgba(255,255,255,0.15); padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-left: 10px; border: 1px solid rgba(255,255,255,0.2); }
 
 /* --- LAYOUT --- */
 #app-root { display: flex; flex: 1; overflow: hidden; }
@@ -48,8 +54,8 @@ body {
 /* SIDEBAR */
 #sidebar { width: 240px; background: white; border-right: 1px solid #ddd; display: flex; flex-direction: column; }
 #sidebar .nav-link { color: #555; padding: 15px 20px; font-weight: 600; cursor: pointer; border-left: 4px solid transparent; transition: 0.2s; }
-#sidebar .nav-link:hover { background: #f8f9fa; color: var(--pm-blue); }
-#sidebar .nav-link.active { background: #eef5ff; color: var(--pm-blue); border-left-color: var(--pm-focus); }
+#sidebar .nav-link:hover { background: var(--pm-light); color: var(--pm-blue); }
+#sidebar .nav-link.active { background: #dceeff; color: var(--pm-blue); border-left-color: var(--pm-focus); }
 
 /* MAIN */
 #main-content { flex: 1; display: flex; gap: 16px; padding: 20px; background: var(--pm-bg); overflow: hidden; }
@@ -64,7 +70,7 @@ body {
 
 /* CARDS E ALERTAS */
 .command-card { border-left: 5px solid var(--pm-focus); padding: 20px; border-radius: 6px; background: #fff; border: 1px solid #eee; border-left-width: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin-bottom: 24px; }
-.command-text { font-size: 1.4rem; font-weight: 700; color: #2c3e50; }
+.command-text { font-size: 1.4rem; font-weight: 700; color: var(--pm-blue); }
 .command-hint { margin-top: 8px; font-size: 0.9rem; color: #777; font-style: italic; }
 .system-alert { background: #fff3cd; border: 1px solid #ffeeba; border-left: 5px solid var(--pm-alert); padding: 14px; border-radius: 6px; font-size: 0.9rem; margin-bottom: 20px; color: #856404; }
 
@@ -73,57 +79,51 @@ body {
 .results-list { max-height: 250px; overflow-y: auto; border: 1px solid #ced4da; border-top: none; display: none; position: absolute; width: 100%; background: white; z-index: 1000; box-shadow: 0 10px 20px rgba(0,0,0,0.15); border-radius: 0 0 8px 8px; }
 .results-list.active { display: block; }
 .result-item { padding: 12px; border-bottom: 1px solid #eee; cursor: pointer; }
-.result-item:hover { background: #eef5ff; color: var(--pm-blue); font-weight: 700; }
+.result-item:hover { background: var(--pm-light); color: var(--pm-blue); font-weight: 700; }
 
 #notepad { flex: 1; font-family: 'Courier New', monospace; font-size: 0.95rem; border: 1px solid #ced4da; background-color: #fcfcfc; resize: none; color: #333; }
 
-/* --- ESTILOS DA FASE 3.5 (TELA CHEIA) --- */
-.pop-review-container {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-.pop-header-large {
-    border-bottom: 2px solid #eee;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-}
-.pop-title-code {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--pm-blue);
-}
-.pop-title-text {
-    font-size: 1.8rem;
-    color: #555;
-    font-weight: 600;
-}
-.pop-section-box {
-    background: #f8f9fa;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 25px;
+/* ESTILOS ESPECÍFICOS SAMU (INDEXOLD) */
+.samu-check-container {
+    background-color: #fff0f0;
+    border: 1px solid #ffcccc;
+    border-radius: 6px;
+    padding: 15px;
     margin-bottom: 20px;
 }
-.pop-label {
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    color: #666;
+.samu-label {
+    color: #b30000;
     font-weight: 700;
-    margin-bottom: 10px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    margin-bottom: 5px;
     display: block;
-    letter-spacing: 1px;
 }
-.pop-content-large {
-    font-size: 1.2rem;
-    line-height: 1.6;
-    color: #333;
-    white-space: pre-wrap;
+.samu-result {
+    margin-top: 10px;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 4px;
+    display: none;
 }
-.pop-actions-box {
-    background: #e3f2fd; /* Azul bem claro */
-    border-left: 8px solid #0d6efd;
-}
+.samu-active { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; display: block; }
+.samu-inactive { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; display: block; }
+
+
+/* --- ESTILOS DA FASE 3.5 (TELA CHEIA) --- */
+.pop-review-container { padding: 20px; max-width: 1200px; margin: 0 auto; }
+.pop-header-large { border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px; }
+.pop-title-code { font-size: 2.5rem; font-weight: 800; color: var(--pm-blue); }
+.pop-title-text { font-size: 1.8rem; color: #555; font-weight: 600; }
+.pop-section-box { background: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; padding: 25px; margin-bottom: 20px; }
+.pop-label { font-size: 0.9rem; text-transform: uppercase; color: #666; font-weight: 700; margin-bottom: 10px; display: block; letter-spacing: 1px; }
+.pop-content-large { font-size: 1.1rem; line-height: 1.6; color: #333; white-space: pre-wrap; }
+.pop-actions-box { background: #e3f2fd; border-left: 8px solid var(--pm-focus); }
+
+/* Ajuste para conteúdo HTML dentro do JSON */
+.pop-content-large strong { color: var(--pm-blue); }
+.pop-content-large ul { padding-left: 20px; }
+
 </style>
 </head>
 <body>
@@ -131,10 +131,11 @@ body {
 <header class="top-header">
     <div class="brand-area w-100 d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
-            <img src="img/logo.png" class="logo-top" alt="Logo" onerror="this.style.display='none'">
-            <span class="ms-3">CIAD</span>
+            <span style="font-size: 24px; margin-right: 10px;">👮</span>
+            <span class="ms-2">COPOM 190</span>
             <span class="system-badge">CONSOLE OPERACIONAL</span>
         </div>
+        <div class="small opacity-75 fw-normal">Doutrina 2025 | Atendente 190</div>
     </div>
 </header>
 
@@ -143,7 +144,7 @@ body {
     <div id="sidebar">
         <div class="p-3 text-muted small fw-bold text-uppercase border-bottom bg-light">Menu Principal</div>
         <div class="nav flex-column mt-2">
-            <div class="nav-link active" onclick="resetScript()">🔄 Novo Atendimento</div>
+            <div class="nav-link active" onclick="resetScript()">🚨 Novo Atendimento</div>
         </div>
     </div>
 
@@ -151,7 +152,7 @@ body {
         <div class="script-panel">
             <div class="script-header">
                 <span>SCRIPT INTERATIVO</span>
-                <span class="badge bg-warning text-dark" id="step-badge">Fase 1</span>
+                <span class="badge bg-primary text-white" id="step-badge">Fase 1</span>
             </div>
             <div class="script-body" id="script-flow"></div>
             <div class="p-3 border-top text-end bg-light">
@@ -162,7 +163,7 @@ body {
 
         <div class="data-panel">
             <div class="d-flex flex-column flex-grow-1">
-                <label class="form-label fw-bold text-secondary small text-uppercase">📝 Histórico CAD</label>
+                <label class="form-label fw-bold text-primary small text-uppercase">📝 Histórico CAD</label>
                 <textarea id="notepad" class="form-control" placeholder="Aguardando dados..."></textarea>
             </div>
             <div class="d-flex gap-2 mt-3">
@@ -178,8 +179,8 @@ body {
     <div class="modal-content">
       
       <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title fw-bold">⚠️ FASE 3.5 - REVISÃO OBRIGATÓRIA DE NATUREZA (POP)</h5>
-        </div>
+        <h5 class="modal-title fw-bold">⚠️ FASE 3.5 - REVISÃO OBRIGATÓRIA (POP)</h5>
+      </div>
       
       <div class="modal-body bg-light">
         <div class="pop-review-container">
@@ -190,19 +191,19 @@ body {
             </div>
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <div class="pop-section-box h-100">
-                        <span class="pop-label">📖 O que caracteriza este fato?</span>
+                        <span class="pop-label">📖 Definição da Natureza</span>
                         <div class="pop-content-large" id="rev-desc">---</div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-7">
                     <div class="pop-section-box pop-actions-box h-100">
-                        <span class="pop-label text-primary">⚡ Ações do Atendente (POP)</span>
-                        <div class="pop-content-large fw-bold" id="rev-action">---</div>
+                        <span class="pop-label text-primary">⚡ Procedimento / Ações</span>
+                        <div class="pop-content-large" id="rev-action">---</div>
                         <hr>
-                        <div class="alert alert-warning mt-3 mb-0 small">
+                        <div class="alert alert-warning mt-3 mb-0 small border-warning">
                             <i class="fw-bold">Atenção:</i> Certifique-se de coletar todas as informações acima antes de liberar a viatura.
                         </div>
                     </div>
@@ -213,11 +214,11 @@ body {
       </div>
       
       <div class="modal-footer justify-content-center p-4" style="background: #e9ecef;">
-        <button type="button" class="btn btn-outline-danger btn-lg px-5 me-3" data-bs-dismiss="modal">
-            ❌ Cancelar / Trocar Natureza
+        <button type="button" class="btn btn-outline-secondary btn-lg px-5 me-3" data-bs-dismiss="modal">
+            ❌ Cancelar / Trocar
         </button>
-        <button type="button" class="btn btn-success btn-lg px-5 fw-bold shadow" onclick="confirmReview()">
-            ✅ CIENTE E CONFIRMAR (Prosseguir)
+        <button type="button" class="btn btn-primary btn-lg px-5 fw-bold shadow" onclick="confirmReview()">
+            ✅ CONFIRMAR E PROSSEGUIR
         </button>
       </div>
     
@@ -228,25 +229,40 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-let roteirosData=[];
-let currentStep=0;
+// --- GESTÃO HÍBRIDA DE DADOS (JSON ou JS) ---
+let roteirosData = [];
+
+// Tenta usar a variável global do JS se estiver carregado
+if (typeof ROTEIROS_DATA !== 'undefined') {
+    roteirosData = ROTEIROS_DATA;
+} 
+
+// Base de dados de Municípios SAMU (Simulada para MG com base no indexold)
+const municipiosSAMU = [
+    "BELO HORIZONTE", "CONTAGEM", "BETIM", "JUIZ DE FORA", "UBERLANDIA", "UBERABA", 
+    "DIVINOPOLIS", "GOVERNADOR VALADARES", "IPATINGA", "SETE LAGOAS", "POUSO ALEGRE", 
+    "VARGINHA", "MONTES CLAROS", "PATOS DE MINAS", "ARAGUARI", "ITAUNA", "PARÃ", 
+    "NOVA SERRANA", "SANTA LUZIA", "RIBEIRAO DAS NEVES", "SABARA", "VESPASIANO"
+];
+
+let currentStep = 0;
 let selectedNature = null;
 let tempNatureData = null;
 let reviewModalInstance = null;
 
-const scriptSteps=[
+const scriptSteps = [
 {
     id: "abertura",
     title: "ABERTURA",
     content:`
     <div class="command-card">
       <div class="command-text">"Polícia Militar, emergência?"</div>
-      <div class="command-hint">Fale com firmeza. Aguarde a resposta do cidadão.</div>
+      <div class="command-hint">Fale com calma e firmeza. Identifique o solicitante.</div>
     </div>
-    <div class="system-alert">⚠️ <strong>ALERTA:</strong> Se não houver resposta, repita 2 vezes. Ruídos de agressão = Ocorrência Imediata.</div>
+    <div class="system-alert">⚠️ <strong>ALERTA:</strong> Se não houver resposta, repita 2 vezes. Ruídos de agressão ou choro = Gerar Ocorrência Imediata (Chamada Muda).</div>
     <div class="action-btn-group d-flex gap-2">
-      <button class="btn btn-lg btn-outline-primary flex-grow-1" onclick="logAction('Contato estabelecido')">🗣️ Respondeu</button>
-      <button class="btn btn-lg btn-outline-danger flex-grow-1" onclick="logAction('Chamada muda - Protocolo')">🔇 Chamada Muda</button>
+      <button class="btn btn-lg btn-outline-primary flex-grow-1" onclick="logAction('Contato estabelecido')">🗣️ Cidadão Respondeu</button>
+      <button class="btn btn-lg btn-outline-danger flex-grow-1" onclick="logAction('Chamada muda - Protocolo Iniciado')">🔇 Chamada Muda</button>
     </div>`
 },
 {
@@ -254,27 +270,36 @@ const scriptSteps=[
     title: "LOCALIZAÇÃO",
     content:`
     <div class="command-card">
-      <div class="command-text">"Onde está a acontecer agora?"</div>
-      <div class="command-hint">Prioridade: Cidade, Bairro e Referência.</div>
+      <div class="command-text">"Onde está a acontecer?"</div>
+      <div class="command-hint">Município, Bairro, Rua, Número e <strong>Ponto de Referência</strong>.</div>
     </div>
     <label class="fw-bold text-secondary">Endereço informado:</label>
-    <input class="form-control form-control-lg mt-2 border-primary" placeholder="Ex: Av Amazonas, Centro..." onblur="logInput('LOCAL',this.value)" autofocus>
-    <div class="text-muted small mt-2">💡 Confirme no mapa do SILOC.</div>`
+    <input class="form-control form-control-lg mt-2 border-primary" placeholder="Ex: Av Amazonas, Centro, próx ao Banco X..." onblur="logInput('LOCAL',this.value)" autofocus>
+    <div class="text-muted small mt-2">💡 Confirme a localização no mapa (SILOC).</div>`
 },
 {
     id: "natureza",
-    title: "CLASSIFICAÇÃO DO FATO",
+    title: "CLASSIFICAÇÃO & REGULAÇÃO",
     content:`
     <div class="command-card">
       <div class="command-text">"O que está a acontecer?"</div>
-      <div class="command-hint">Pesquise a natureza abaixo. O sistema abrirá a revisão em tela cheia.</div>
+      <div class="command-hint">Verifique a cobertura SAMU e depois classifique a natureza.</div>
+    </div>
+
+    <div class="samu-check-container">
+        <label class="samu-label">🚑 CONSULTAR REGULAÇÃO (SAMU / BOMBEIRO)</label>
+        <div class="input-group mb-2">
+            <input id="municipioInput" class="form-control" placeholder="Digite o município para verificar cobertura SAMU..." onkeyup="verificarSamu(this.value)">
+        </div>
+        <div id="samu-result" class="samu-result"></div>
+        <small class="text-muted">Se a cidade tiver SAMU e o caso for clínico/trauma, transfira a ligação.</small>
     </div>
     
     <div class="search-wrapper">
-        <label class="fw-bold mb-1 text-danger">🔍 Pesquisar Natureza (POP)</label>
+        <label class="fw-bold mb-1 text-primary">🔍 Pesquisar Natureza (Bloqueante)</label>
         <div class="input-group">
             <span class="input-group-text bg-white"><i class="text-muted">🔎</i></span>
-            <input id="nature-input" class="form-control form-control-lg border-primary" placeholder="Digite o fato (ex: roubo, acidente)..." onkeyup="searchNature(this.value)" autocomplete="off">
+            <input id="nature-input" class="form-control form-control-lg border-primary" placeholder="Digite (ex: roubo, furto, som, agressão)..." onkeyup="searchNature(this.value)" autocomplete="off">
         </div>
         <div id="nature-results" class="results-list"></div>
     </div>
@@ -290,9 +315,9 @@ const scriptSteps=[
       <div class="command-hint">Informações vitais para a guarnição.</div>
     </div>
     <div class="d-grid gap-2">
-        <label class="btn btn-outline-danger text-start p-3 fw-bold"><input type="checkbox" class="me-2" onchange="logCheck('ARMA DE FOGO')"> 🔫 Há armas de fogo?</label>
-        <label class="btn btn-outline-warning text-start p-3 fw-bold text-dark"><input type="checkbox" class="me-2" onchange="logCheck('VÍTIMA FERIDA')"> 🚑 Há feridos?</label>
-        <label class="btn btn-outline-secondary text-start p-3 fw-bold text-dark"><input type="checkbox" class="me-2" onchange="logCheck('AUTORES PRESENTES')"> 🏃 Autores no local?</label>
+        <label class="btn btn-outline-danger text-start p-3 fw-bold"><input type="checkbox" class="me-2" onchange="logCheck('ARMA DE FOGO')"> 🔫 Há armas de fogo no local?</label>
+        <label class="btn btn-outline-warning text-start p-3 fw-bold text-dark"><input type="checkbox" class="me-2" onchange="logCheck('VÍTIMA FERIDA')"> 🚑 Há feridos necessitando socorro?</label>
+        <label class="btn btn-outline-secondary text-start p-3 fw-bold text-dark"><input type="checkbox" class="me-2" onchange="logCheck('AUTORES PRESENTES')"> 🏃 Autores ainda no local?</label>
     </div>`
 },
 {
@@ -301,16 +326,27 @@ const scriptSteps=[
     content:`
     <div class="command-card" style="border-left-color: #198754;">
       <div class="command-text">"A viatura foi acionada."</div>
-      <div class="command-hint">Forneça o protocolo e encerre.</div>
+      <div class="command-hint">Oriente aguardar em local seguro e forneça o protocolo.</div>
     </div>
     <button class="btn btn-success btn-lg w-100 py-4 fw-bold shadow-sm" onclick="resetScript()">✅ FINALIZAR ATENDIMENTO</button>`
 }
 ];
 
 // --- INICIALIZAÇÃO ---
-document.addEventListener('DOMContentLoaded', () => {
-    loadJSON();
+document.addEventListener('DOMContentLoaded', async () => {
     reviewModalInstance = new bootstrap.Modal(document.getElementById('reviewModal'));
+    
+    // Se não carregou via JS, tenta carregar via JSON (Fallback)
+    if(roteirosData.length === 0) {
+        try {
+            const r = await fetch('roteiros190.json');
+            roteirosData = await r.json();
+            console.log("Dados carregados via JSON");
+        } catch(e) {
+            console.log("Nenhum dado encontrado (Nem JS nem JSON).");
+        }
+    }
+    
     renderStep();
 });
 
@@ -319,24 +355,48 @@ function removeAcentos(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
+// --- FUNÇÃO DO INDEXOLD: VERIFICAÇÃO SAMU ---
+function verificarSamu(municipio) {
+    const resultDiv = document.getElementById('samu-result');
+    if (municipio.length < 3) {
+        resultDiv.style.display = 'none';
+        return;
+    }
+
+    const termo = removeAcentos(municipio.toUpperCase());
+    const existe = municipiosSAMU.some(m => removeAcentos(m).includes(termo));
+
+    if (existe) {
+        resultDiv.className = 'samu-result samu-active';
+        resultDiv.innerHTML = `✅ <strong>${municipio.toUpperCase()}</strong> POSSUI BASE SAMU.<br>Transfira casos clínicos ou de trauma.`;
+    } else {
+        resultDiv.className = 'samu-result samu-inactive';
+        resultDiv.innerHTML = `⚠️ <strong>${municipio.toUpperCase()}</strong> NÃO POSSUI SAMU LOCAL.<br>Empenhe Bombeiros ou Ambulância Sanitária.`;
+    }
+}
+
+
 // --- NAVEGAÇÃO ---
 function renderStep(){
   const step = scriptSteps[currentStep];
   document.getElementById('script-flow').innerHTML = step.content;
   document.getElementById('step-badge').innerText = `Fase ${currentStep+1}: ${step.title}`;
   
-  // Lógica da Fase 3
   if(step.id === 'natureza'){
       const feedbackDiv = document.getElementById('nature-feedback');
       const input = document.getElementById('nature-input');
       
       if(selectedNature) {
-          input.value = `${selectedNature.NATUREZA} - ${selectedNature.TÍTULO}`;
-          input.classList.add('bg-success', 'text-white');
+          // Adaptador para exibir titulo correto independente da fonte de dados
+          const displayTitle = selectedNature.titulo || selectedNature.TÍTULO;
+          const displayCode = selectedNature.codigo || selectedNature.NATUREZA;
+          
+          input.value = `${displayCode} - ${displayTitle}`;
+          input.classList.add('bg-primary', 'text-white');
           input.disabled = true;
-          feedbackDiv.innerHTML = `<div class="alert alert-success">
-            ✅ <strong>POP VALIDADO.</strong> Natureza: ${selectedNature.TÍTULO}.<br>
-            <button class="btn btn-sm btn-outline-success mt-2" onclick="resetNatureSelection()">Alterar</button>
+          feedbackDiv.innerHTML = `<div class="alert alert-success border-success">
+            ✅ <strong>NATUREZA DEFINIDA.</strong><br>${displayTitle}.<br>
+            <button class="btn btn-sm btn-outline-dark mt-2" onclick="resetNatureSelection()">Alterar</button>
           </div>`;
       } else {
           setTimeout(() => input.focus(), 100);
@@ -346,7 +406,7 @@ function renderStep(){
 
 function nextStep(){
     if(scriptSteps[currentStep].id === 'natureza' && !selectedNature) {
-        alert("⛔ BLOQUEIO:\nSelecione uma natureza e confirme o procedimento em tela cheia.");
+        alert("⛔ BLOQUEIO:\nSelecione o tipo de ocorrência e confirme o roteiro em tela cheia.");
         return;
     }
     if(currentStep < scriptSteps.length-1){
@@ -368,51 +428,60 @@ function resetNatureSelection() {
     renderStep();
 }
 
-// --- JSON ---
-async function loadJSON(){
-  try {
-      const r = await fetch('roteiros190.json');
-      roteirosData = await r.json();
-  } catch(e) { console.error(e); }
-}
-
-// --- BUSCA ---
+// --- BUSCA (Híbrida: JSON ou JS) ---
 function searchNature(q){
   const d = document.getElementById('nature-results');
   if(q.length < 2) { d.classList.remove('active'); return; }
   
   d.innerHTML = '';
   const termoLimpo = removeAcentos(q.toLowerCase());
+  
   const matches = roteirosData.filter(i => {
-      const textoLimpo = removeAcentos((i.NATUREZA + ' ' + i.TÍTULO + ' ' + (i.DESCRIÇÃO || '')).toLowerCase());
-      return textoLimpo.includes(termoLimpo);
+      // Normaliza campos para funcionar com ambos os formatos
+      const codigo = i.codigo || i.NATUREZA || "";
+      const titulo = i.titulo || i.TÍTULO || "";
+      const desc = i.descricao || i.DESCRIÇÃO || "";
+      const acao = i.roteiro || i.AÇÕES || "";
+      
+      // Remove tags HTML para busca limpa
+      const textoSearch = (codigo + ' ' + titulo + ' ' + desc + ' ' + acao).replace(/<[^>]*>?/gm, '').toLowerCase();
+      return removeAcentos(textoSearch).includes(termoLimpo);
   }).slice(0, 15);
 
   if(matches.length === 0) {
       d.innerHTML = "<div class='p-3 text-muted'>Sem resultados.</div>";
   } else {
       matches.forEach(i => {
+        const displayCode = i.codigo || i.NATUREZA;
+        const displayTitle = i.titulo || i.TÍTULO;
+        
         const div = document.createElement('div');
         div.className = 'result-item';
-        div.innerHTML = `<span class="badge bg-primary me-2">${i.NATUREZA}</span> <strong>${i.TÍTULO}</strong>`;
-        div.onclick = () => openReviewMode(i); // AQUI CHAMA A TELA CHEIA
+        div.innerHTML = `<span class="badge bg-primary me-2">${displayCode}</span> <strong>${displayTitle}</strong>`;
+        div.onclick = () => openReviewMode(i); 
         d.appendChild(div);
       });
   }
   d.classList.add('active');
 }
 
-// --- FASE 3.5: LÓGICA DE REVISÃO ---
+// --- FASE 3.5: LÓGICA DE REVISÃO (Híbrida) ---
 function openReviewMode(item) {
     tempNatureData = item;
     
-    // Preenche Tela Cheia
-    document.getElementById('rev-code').innerText = item.NATUREZA;
-    document.getElementById('rev-title').innerText = item.TÍTULO;
-    document.getElementById('rev-desc').innerText = item.DESCRIÇÃO || "Sem descrição.";
-    document.getElementById('rev-action').innerText = item.AÇÕES || "Verificar POP padrão.";
+    // Normalização de campos
+    const codigo = item.codigo || item.NATUREZA;
+    const titulo = item.titulo || item.TÍTULO;
+    const desc = item.descricao || item.DESCRIÇÃO || "Sem descrição.";
+    const acao = item.roteiro || item.AÇÕES || "Verificar Procedimento Padrão.";
     
-    // Abre Modal Fullscreen
+    document.getElementById('rev-code').innerText = codigo;
+    document.getElementById('rev-title').innerText = titulo;
+    
+    // Suporte a HTML (do arquivo JS) ou Texto puro (do JSON)
+    document.getElementById('rev-desc').innerHTML = desc;
+    document.getElementById('rev-action').innerHTML = acao;
+    
     reviewModalInstance.show();
     document.getElementById('nature-results').classList.remove('active');
 }
@@ -422,15 +491,17 @@ function confirmReview() {
     
     selectedNature = tempNatureData;
     
+    const displayCode = selectedNature.codigo || selectedNature.NATUREZA;
+    const displayTitle = selectedNature.titulo || selectedNature.TÍTULO;
+
     // Log
     const notepad = document.getElementById('notepad');
     const hora = new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
-    notepad.value += `[${hora}] NATUREZA: ${selectedNature.NATUREZA} - ${selectedNature.TÍTULO}\n`;
+    notepad.value += `[${hora}] NATUREZA: ${displayCode} - ${displayTitle}\n`;
     notepad.scrollTop = notepad.scrollHeight;
     
     reviewModalInstance.hide();
     
-    // Avança automaticamente para Segurança após confirmar POP
     renderStep();
     setTimeout(() => nextStep(), 500);
 }

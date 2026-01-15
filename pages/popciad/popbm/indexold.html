@@ -1,353 +1,684 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>POP Teleatendimento — CIAD</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teleatendimento 193 COBOM</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        /* * Estilos Globais e Layout da Aplicação
+         * Define o layout geral da página, fontes e cores de fundo.
+         */
+        body {
+            background-color: #f1e9e2;
+            padding: 20px;
+            display: flex;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        #left-panel {
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            margin-right: 20px;
+        }
+        
+        #sidebar {
+            background-color: #434a4f;
+            color: white;
+            padding: 20px 0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        #decision-tree-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* * Estilos dos Cards de Decisão e Componentes Internos
+         * Estilos específicos para os cards que contêm as perguntas e opções.
+         */
+        .card.decision-card .card-header {
+            background-color: #434a4f !important;
+            border-color: #434a4f;
+            color: white;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        
+        .decision-card {
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        #question-container {
+            min-height: 100px;
+            padding: 20px;
+        }
+        
+        #guidance {
+            background-color: #f1e9e2;
+            border-left: 4px solid #f47920;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+            text-align: left;
+        }
+        
+        /* * Estilos da Navegação Lateral
+         * Define a aparência dos links do menu lateral.
+         */
+        .nav-link {
+            color: #adb5bd;
+            border-left: 4px solid transparent;
+            padding: 10px 20px;
+            margin: 5px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: white;
+            background-color: #606a70;
+            border-left: 4px solid #f47920;
+        }
+        
+        .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* * Estilos dos Botões de Opção e Voltar
+         * Define a aparência dos botões de interação.
+         */
+        .option-btn {
+            margin: 5px;
+            transition: all 0.3s;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+        .option-btn:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
 
-  <!-- Seu CSS customizado -->
-  <link rel="stylesheet" href="styles.css">
+        .option-btn i {
+            margin-right: 8px;
+        }
+        
+        #back-btn {
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        #back-btn i {
+            margin-right: 8px;
+        }
+
+        /* * Estilos do Painel de Histórico e Anotações
+         * Define a aparência da seção de resumo e anotações da chamada.
+         */
+        #history-panel {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .guidance-icon {
+            color: #f47920;
+            margin-right: 8px;
+        }
+        
+        .summary-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .summary-question {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .summary-answer {
+            color: #17a2b8;
+            margin-left: 10px;
+        }
+        
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #f47920;
+        }
+        
+        #copy-message {
+            font-weight: bold;
+        }
+
+        #notes-area {
+            width: 100%;
+            height: 150px;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            resize: vertical;
+            font-size: 1rem;
+        }
+
+        /* * Estilos para a Consulta SAMU
+         * Define a aparência dos campos de busca e resultados da consulta SAMU.
+         */
+        .samu-search-container {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .samu-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .samu-btn {
+            padding: 10px 20px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .samu-btn:hover {
+            background-color: #0056b3;
+        }
+        
+        .highlight {
+            font-weight: bold;
+            color: #0066cc;
+        }
+        
+        .result-item {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 0 5px 5px 0;
+            margin-bottom: 15px;
+            border-left: 3px solid #f47920;
+            text-align: left;
+        }
+
+        /* * Estilos para Chamadas Salvas
+         * Define a aparência dos itens da lista de chamadas salvas e seus detalhes.
+         */
+        .saved-call-item {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #dee2e6;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .saved-call-item:hover {
+            background-color: #e2e6ea;
+        }
+
+        .saved-call-detail {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid #dee2e6;
+        }
+        
+        /* * Media Queries para Responsividade
+         * Ajusta o layout para telas menores, como dispositivos móveis.
+         */
+        @media (max-width: 992px) {
+            body {
+                flex-direction: column;
+            }
+            #left-panel {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="d-flex" id="app-root">
-
-    <!-- TOPO COM LOGO -->
-<header class="topbar-sisp">
-  <a href="../../index.html" title="Voltar ao início">
-    <img src="logo.png" alt="Logo SISP" class="logo-sisp-img">
-  </a>
-</header>
-
-    <!-- SIDEBAR -->
-    <nav id="sidebar" class="bg-white border-end">
-      <div class="sidebar-header d-flex align-items-center justify-content-between px-3 py-3">
-        <div class="d-flex align-items-center gap-2">
-          <i class="bi bi-menu-button-wide fs-4 text-primary"></i>
-          <div>
-            <h5 class="mb-0">POP</h5>
-            <small class="text-muted">Teleatendimento</small>
-          </div>
+    <!-- Painel Esquerdo: Menu de Navegação -->
+    <div id="left-panel">
+        <div id="sidebar">
+            <h4 class="px-3 mb-4"><i class="bi bi-menu-button-wide"></i> POP Teleatendimento</h4>
+            <ul class="nav flex-column" id="main-menu">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-target="triagem">
+                        <i class="bi bi-fire"></i> Triagem de Chamadas 193</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="dados-cad">
+                        <i class="bi bi-clipboard2-check"></i> Registro de Chamada no CAD</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="rechamadas">
+                        <i class="bi bi-telephone-plus"></i> Rechamadas 193</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="falha">
+                        <i class="bi bi-bell-slash"></i> Falhas na Comunicação</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="trote">
+                        <i class="bi bi-chat-dots"></i> Gerenciamento de Trotes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="orgao">
+                        <i class="bi bi-arrow-left-right"></i> Transferência PM / PC</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="samu">
+                        <i class="bi bi-arrow-left-right"></i> Transferência SAMU</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="busca-samu">
+                        <i class="bi bi-hospital"></i> SAMU: Consulta de Municípios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="militar">
+                        <i class="bi bi-telephone"></i> Contato com Militares</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="queixas">
+                        <i class="bi bi-hand-thumbs-up"></i> Agradecimentos e Reclamações</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="informacoes">
+                        <i class="bi bi-info-circle"></i> Orientações e Informações</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="saved-calls">
+                        <i class="bi bi-archive"></i> Chamadas Salvas</a>
+                </li>
+            </ul>
         </div>
-        <button class="btn btn-sm btn-outline-secondary d-md-none" id="btn-toggle-sidebar">
-          <i class="bi bi-x-lg"></i>
-        </button>
-      </div>
+    </div>
 
-      <div class="sidebar-body px-2">
-        <ul class="nav flex-column" id="main-menu" role="menu">
-          <!-- Itens do menu (removido 'Chamadas Salvas') -->
-          <li class="nav-item"><a class="nav-link" href="#" data-target="dados-cad"><i class="bi bi-clipboard2-check me-2"></i>Registro CAD</a></li>
-          <li class="nav-item"><a class="nav-link" href="#" data-target="rechamadas"><i class="bi bi-telephone-plus me-2"></i>Rechamadas</a></li>
-          <li class="nav-item"><a class="nav-link" href="#" data-target="falha"><i class="bi bi-bell-slash me-2"></i>Falhas Comunicação</a></li>
-          <li class="nav-item"><a class="nav-link" href="#" data-target="trote"><i class="bi bi-chat-dots me-2"></i>Gerenciar Trotes</a></li>
-          <li class="nav-item"><a class="nav-link" href="#" data-target="orgao"><i class="bi bi-arrow-left-right me-2"></i>Transferência CIAD</a></li>
-          <li class="nav-item"><a class="nav-link" href="#" data-target="samu"><i class="bi bi-hospital me-2"></i>Transferência SAMU</a></li>
-          <li class="nav-item"><a class="nav-link" href="#" data-target="busca-samu"><i class="bi bi-search me-2"></i>Consulta Municípios SAMU</a></li>
-          <li class="nav-item"><a class="nav-link" href="#" data-target="militar"><i class="bi bi-telephone me-2"></i>Contato Militares</a></li>
-          <li class="nav-item"><a class="nav-link" href="#" data-target="queixas"><i class="bi bi-hand-thumbs-up me-2"></i>Agradec/Reclamações</a></li>
-          <li class="nav-item"><a class="nav-link" href="#" data-target="informacoes"><i class="bi bi-info-circle me-2"></i>Informações</a></li>
-        </ul>
-      </div>
+    <!-- Painel Principal: Conteúdo Dinâmico -->
+    <div id="decision-tree-container">
+        <div class="card decision-card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="text-center"><i class="bi bi-diagram-3"></i> POP Teleatendimento 193 - COBOM</h2>
+            </div>
+            <div class="card-body">
 
-      <div class="sidebar-footer px-3 py-3">
-        <small class="text-muted">Usuário: <strong>Atendente</strong></small>
-      </div>
-    </nav>
-
-    <!-- MAIN -->
-    <main id="main-content" class="flex-grow-1">
-
-      <header class="d-md-none bg-white border-bottom p-2">
-        <button class="btn btn-outline-primary" id="btn-open-sidebar">
-          <i class="bi bi-list"></i> Menu
-        </button>
-      </header>
-
-      <div class="container-fluid p-4">
-        <div class="card shadow-sm">
-          <div class="card-header bg-primary text-white">
-            <h4 class="mb-0"><i class="bi bi-gear"></i> POP Teleatendimento Unificado - CIAD</h4>
-          </div>
-
-          <div class="card-body">
-
-            <!-- ===== Registro CAD ===== -->
-            <section id="dados-cad" class="dynamic-content d-none">
-              <h5>Registro de Chamadas no CAD</h5>
-              <div class="mt-2">
-                <p><i class="bi bi-info-circle-fill"></i> <strong>Orientações principais</strong></p>
-                <ul>
-                  <li><strong>Objetivo:</strong> Criar a chamada no CAD com dados precisos e completos.</li>
-                  <li><strong>Iniciar registro:</strong> Clique no ícone de giroflex e inicie a coleta dos dados.</li>
-                  <li><strong>Dados essenciais:</strong> nome do solicitante (ou "anônimo"), telefone com DDD, natureza da ocorrência e endereço completo (logradouro, número, bairro, município).</li>
-                  <li><strong>Referências:</strong> postes, pontos comerciais, km em rodovias, cor do imóvel, etc.</li>
-                  <li><strong>Observações:</strong> sempre confirme telefone; para transferências para PMMG/PCMG confirmar se o número é ramal interno.</li>
-                </ul>
-
-                <h6>Campos recomendados para preencher:</h6>
-                <ol>
-                  <li>Solicitante (nome ou "anônimo").</li>
-                  <li>Telefone (DDD + número).</li>
-                  <li>Natureza (selecione a opção mais adequada no CAD).</li>
-                  <li>Endereço completo — incluir complemento e ponto de referência.</li>
-                  <li>Referências (REF:) e tempo do incidente (TAC:).</li>
-                </ol>
-
-                <p class="text-muted">Após preencher, confirme se o despacho foi gerado e registre o número do protocolo no histórico da chamada.</p>
-              </div>
-            </section>
-
-            <!-- ===== Rechamadas ===== -->
-            <section id="rechamadas" class="dynamic-content d-none">
-              <h5>Rechamadas de Emergência</h5>
-              <div class="mt-2">
-                <p><strong>Contexto:</strong> O sistema pode sinalizar rechamadas por mesmo telefone/endereço. Verifique ocorrências similares antes de criar nova chamada.</p>
-                <ul>
-                  <li>Se existir ocorrência em andamento, atualize os dados na ocorrência já criada (telefone adicional, localização precisa).</li>
-                  <li>Se for ocorrência diferente, proceda com a criação de nova chamada no CAD.</li>
-                  <li>Se houver conflito entre informações, contate o Supervisor de Teleatendimento.</li>
-                </ul>
-                <p><strong>Procedimentos comuns:</strong></p>
-                <ul>
-                  <li>Caso haja viatura empenhada, informe ao solicitante que já há atendimento em andamento.</li>
-                  <li>Se houver repetidas rechamadas com informações distintas, solicitar confirmação e anotar referências no histórico.</li>
-                </ul>
-              </div>
-            </section>
-
-            <!-- ===== Falhas na Comunicação ===== -->
-            <section id="falha" class="dynamic-content d-none">
-              <h5>Procedimentos para Falhas na Comunicação</h5>
-              <div class="mt-2">
-                <p><strong>Chamada muda (sem resposta):</strong></p>
-                <ul>
-                  <li>Tentar saudação clara até 3 vezes; se sem resposta, encerrar: "Sua ligação será encerrada por falta de comunicação."</li>
-                  <li>Qualificar no CAD como "<em>Falha na comunicação &gt; solicitante mudo</em>".</li>
-                </ul>
-
-                <p><strong>Ligação interrompida antes de dados mínimos:</strong></p>
-                <ul>
-                  <li>Qualificar como "<em>Falha na comunicação &gt; ligação caiu</em>" ou opção correspondente.</li>
-                </ul>
-
-                <p><strong>Solicitante estrangeiro:</strong></p>
-                <ul>
-                  <li>Se não houver conhecer o idioma, comunicar: "Aguarde um momento." e acionar o Supervisor para buscar alguém na equipe com fluência.</li>
-                  <li>Registrar no histórico: "Solicitante estrangeiro — idioma informado: [idioma]".</li>
-                </ul>
-              </div>
-            </section>
-
-            <!-- ===== Gerenciamento de Trotes ===== -->
-            <section id="trote" class="dynamic-content d-none">
-              <h5>Gerenciamento de Trotes</h5>
-              <div class="mt-2">
-                <p><strong>Definição:</strong> Chamadas com comportamento de trote (risadas, xingamentos, respostas não cooperativas).</p>
-                <p><strong>Procedimentos:</strong></p>
-                <ul>
-                  <li>Solicitar confirmação de informações (nome, logradouro) — se houver contradição, pode indicar trote.</li>
-                  <li>Em caso confirmado, informar: "Esta ligação foi registrada e poderá ser rastreada para fins de responsabilização penal e civil."</li>
-                  <li>Registrar no histórico como "suspeita de trote" e, se for o caso, transferir ao Supervisor.</li>
-                </ul>
-                <p class="text-muted">Se houver dúvida, prefira registrar informações básicas e acionar o Supervisor.</p>
-              </div>
-            </section>
-
-            <!-- ===== Transferência para Órgãos (CIAD) ===== -->
-            <section id="orgao" class="dynamic-content d-none">
-              <h5>Transferência para Polícia Militar / Bombeiros / Polícia Civil</h5>
-              <div class="mt-2">
-                <p><strong>Pergunta inicial:</strong> "A emergência é de competência de outro órgão?"</p>
-                <p><strong>Procedimento de transferência:</strong></p>
-                <ul>
-                  <li>Informar ao solicitante: "Senhor(a), aguarde enquanto transfiro sua ligação para o órgão responsável."</li>
-                  <li>Transferir para o ramal correto: <strong>190 (PM), 193 (Bombeiros), 197 (PC)</strong>.</li>
-                  <li>Registrar no histórico o ramal transferido e, se possível, nome do atendente receptor.</li>
-                </ul>
-              </div>
-            </section>
-
-            <!-- ===== Transferência SAMU ===== -->
-            <section id="samu" class="dynamic-content d-none">
-              <h5>Transferência para o SAMU</h5>
-              <div class="mt-2">
-                <p><strong>Objetivo:</strong> Transferir ocorrências de APH Clínico para as centrais SAMU.</p>
-                <ul>
-                  <li><strong>Ramais comuns:</strong> 192 (SAMU-BH), 403 (SAMU-Betim), 404 (SAMU-Contagem), 405 (SAMU-Sete Lagoas), 406 (SAMU-Divinópolis).</li>
-                  <li>Ao transferir, informe o número do protocolo e o nome do atendente receptor no histórico.</li>
-                </ul>
-                <p class="text-muted">Se não souber o ramal exato, contacte o Supervisor.</p>
-              </div>
-            </section>
-
-            <!-- ===== Consulta Municípios SAMU ===== -->
-            <section id="busca-samu" class="dynamic-content d-none">
-              <h5>SAMU — Consulta de Municípios Atendidos</h5>
-              <div class="mt-3 samu-search-container">
-                <div class="input-group mb-3">
-                  <input type="text" id="municipioInput" class="form-control" placeholder="Digite o nome do município (mínimo 3 caracteres)...">
-                  <button class="btn btn-primary" id="btn-pesquisar-samu">Pesquisar</button>
+                <!-- Conteúdo da Seção de Triagem (Árvore de Decisão) -->
+                <div id="triagem" class="dynamic-content">
+                    <div id="question-container">
+                        <h3 id="question">Triagem de emergência 193</h3>
+                        <div id="guidance">
+                            <!-- O conteúdo da orientação é preenchido via JavaScript -->
+                        </div>
+                    </div>
+                    <div id="options" class="d-flex flex-wrap justify-content-center">
+                        <!-- Opções de resposta são preenchidas via JavaScript -->
+                    </div>
+                    <textarea id="notes-area" class="form-control" placeholder="Anotações da chamada (ex: SIT: Fogo na cozinha. VIT: 1 vítima consciente. REF: Prédio azul. TAC: 5 min.)..."></textarea>
                 </div>
-                <div id="samu-result"></div>
 
-                <div class="mt-3">
-                  <p class="text-muted"><strong>Orientação:</strong> Utilize esta busca para identificar a central SAMU responsável pelo município informado.</p>
+                <!-- Conteúdo da Seção de Registro de Chamada no CAD -->
+                <div id="dados-cad" class="dynamic-content" style="display:none;">
+                    <div id="question-container">
+                        <h3>Registro de Chamadas no CAD</h3>
+                        <div id="guidance">
+                            <p><i class="bi bi-info-circle-fill guidance-icon"></i><strong>Orientações:</strong></p>
+                            <p><strong>Objetivo:</strong> Iniciar e registrar chamada no CAD com dados precisos.</p>
+                            <p><strong>Início do Registro:</strong></p>
+                            <ul>
+                                <li>Clicar no ícone do giroflex.</li>
+                                <li>Inserir os dados iniciais. A coleta deve ser completa e precisa.</li>
+                            </ul>
+                            <p><strong>2. Dados Essenciais:</strong></p>
+                            <ul>
+                                <li><strong>Solicitante:</strong> Nome (opcional; se não fornecido, registrar "anônimo").</li>
+                                <li><strong>Telefone:</strong> Número com DDD (confirmar, especialmente para transferências PMMG/PCMG, pois o número aparente pode ser ramal interno).</li>
+                                <li><strong>Natureza:</strong> Selecionar a mais adequada no CAD.</li>
+                                <li><strong>Endereço da Ocorrência (Essencial para Despacho):</strong>
+                                    <ul>
+                                        <li>Tipo de logradouro (rua, avenida, rodovia).</li>
+                                        <li>Nome do logradouro.</li>
+                                        <li>Número (confirmar complementos: "320-A", "320-B").</li>
+                                        <li><strong>Rodovias:</strong> KM mais próximo, sentido (ex: "BR-381, sentido Vitória"), via marginal ou principal.</li>
+                                        <li>Complemento (apartamento, loja, etc.).</li>
+                                        <li>Bairro.</li>
+                                        <li>Município.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Referências:</strong> Bairro vizinho (para ruas homônimas), construções notáveis, elevados, postos de gasolina, estabelecimentos comerciais.</li>
+                                <li><strong>Outros:</strong> Envolvimento de militar ou ocorrência "de destaque".</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </section>
 
-            <!-- ===== Contato com Militares ===== -->
-            <section id="militar" class="dynamic-content d-none">
-              <h5>Contato com Militares (COBOM / Cabines)</h5>
-              <div class="mt-2">
-                <p><strong>Procedimentos:</strong></p>
-                <ul>
-                  <li>Identificar patente e unidade do militar que solicita atendimento.</li>
-                  <li>Ao solicitar transferência, informar o nome do solicitante, telefone e natureza.</li>
-                  <li>Se o ramal estiver ocupado, informar: "O ramal está ocupado; posso tentar outro contato ou pedir que retorne mais tarde."</li>
-                </ul>
-                <p class="text-muted">Para pedidos de registro de empenho administrativo, transferir para o Supervisor.</p>
-              </div>
-            </section>
+                <!-- Conteúdo da Seção de Falhas na Comunicação -->
+                <div id="falha" class="dynamic-content" style="display:none;">
+                    <div id="question-container">
+                        <h3>Procedimentos para Falhas na Comunicação</h3>
+                        <div id="guidance">
+                            <p><i class="bi bi-info-circle-fill guidance-icon"></i><strong>Orientações:</strong></p>
+                            <p><strong>Chamada Muda (Sem Resposta):</strong></p>
+                            <ul>
+                                <li>Repetir a saudação, de forma clara e audível, por até três vezes, com pausas entre as tentativas.</li>
+                                <li>Persistindo a ausência de resposta, encerrar a chamada informando: "Sua ligação será encerrada por falta de comunicação."</li>
+                                <li>Qualificar no painel: "<i>Falha na comunicação</i> &gt; <i>solicitante mudo</i>".</li>
+                            </ul>
+                            <p><strong>Ligação Interrompida ou Inaudível (Antes de Dados Mínimos):</strong></p>
+                            <ul>
+                                <li>Qualificar no sistema como: "<i>Falha na comunicação</i>", selecionando a opção correspondente: "<i>ligação caiu</i>" ou "<i>outras falhas</i>".</li>
+                            </ul>
+                            <p><strong>Solicitante estrangeiro (Não fala português):</strong></p>
+                            <ul>
+                                <li>Caso o teleatendente não compreenda o idioma falado pelo solicitante, deve comunicar, em português: "Aguarde um momento."</li>
+                                <li><strong>A chamada deve ser imediatamente repassada ao Supervisor de Teleatendimento.</strong> O Supervisor deverá verificar, entre os integrantes da equipe, a existência de alguém com fluência no idioma do solicitante ou na língua inglesa.</li>
+                                <li><strong>Havendo alguém apto</strong>, a chamada será transferida para esse integrante, que deverá colher todas as informações necessárias para a criação da ocorrência, se for o caso.</li>
+                                <li><strong>Não havendo pessoa disponível que domine o idioma do solicitante ou o inglês</strong>, o solicitante deverá ser orientado, em português, a buscar auxílio de alguém que possa ajudá-lo a se comunicar. Após a orientação, a chamada será encerrada.</li>
+                                <li><strong>Caso a ocorrência seja gerada</strong>, registrar no histórico: "Solicitante estrangeiro, não fala português. Comunica-se em [idioma informado]."</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
-            <!-- ===== Agradecimentos e Reclamações ===== -->
-            <section id="queixas" class="dynamic-content d-none">
-              <h5>Agradecimentos e Reclamações</h5>
-              <div class="mt-2">
-                <p><strong>Procedimentos:</strong></p>
-                <ul>
-                  <li>Registre manifestações simples como "informação/orientação".</li>
-                  <li>Para reclamações sobre conduta ou denúncia, orientar o cidadão a procurar a Corregedoria ou ligar para 181 (Disque Denúncia), quando aplicável.</li>
-                  <li>Se for uma queixa de ocorrência em andamento ou flagrante, transferir ao Supervisor e registrar no CAD se necessário.</li>
-                </ul>
-              </div>
-            </section>
+                <!-- Conteúdo da Seção de Gerenciamento de Trotes -->
+                <div id="trote" class="dynamic-content" style="display:none;">
+                    <div id="question-container">
+                        <h3>Gerenciamento de Tentativa de Trote</h3>
+                        <div id="guidance">
+                            <p><i class="bi bi-info-circle-fill guidance-icon"></i><strong>Orientações:</strong></p>
+                            <p><strong>Definição:</strong> Chamadas com risadas, xingamentos, não cumprimento intencional de instruções.</p>
+                            <p><strong>Procedimento (Trote Confirmado):</strong></p>
+                            <ul>
+                                <li>Informar ao solicitante: "Esta ligação foi registrada e poderá ser rastreada para fins de responsabilização penal e civil."</li>
+                                <li>Completar registro como nova emergência.</li>
+                                <li>Incluir "suspeita de trote" no histórico.</li>
+                                <li>Transferir para o Supervisor de Teleatendimento.</li>
+                            </ul>
+                            <p><strong>Procedimento (Suspeita de Trote Durante Registro):</strong></p>
+                            <ul>
+                                <li><strong>Teste:</strong> Solicitar que repita 2-3 informações (nome, logradouro, bairro) ou introduzir erros intencionais.</li>
+                                <li><strong>Falha no Teste:</strong> Informar ao solicitante: "Esta ligação foi registrada e poderá ser rastreada para fins de responsabilização penal e civil."</li>
+                                <li><strong>Insistência:</strong> Completar registro como nova emergência, incluir "suspeita de trote" e transferir para o Supervisor.</li>
+                                <li><strong>Não Insistência:</strong> Encerrar a ligação e classificar como "trote".</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
-            <!-- ===== Informações Gerais ===== -->
-            <section id="informacoes" class="dynamic-content d-none">
-              <h5>Orientações e Informações</h5>
-              <div class="mt-2">
-                <p><strong>Contexto:</strong> Solicitações de informações diversas (projetos, documentos, orientações gerais).</p>
-                <ul>
-                  <li>Se a informação for de outra instituição, orientar o solicitante e, se necessário, transferir ao Supervisor.</li>
-                  <li>Para orientações sobre risco (ex: vazamento de gás, incêndio), solicite que aguardem enquanto verifica suporte e registre no histórico.</li>
-                </ul>
-              </div>
-            </section>
+                <!-- Conteúdo da Seção de Transferência PM / PC -->
+                <div id="orgao" class="dynamic-content" style="display:none;">
+                    <div id="question-container">
+                        <h3>Transferência para Polícia Militar ou Polícia Civil</h3>
+                        <div id="guidance">
+                            <p><i class="bi bi-info-circle-fill guidance-icon"></i><strong>Orientações:</strong></p>
+                            <p><strong>Objetivo:</strong> Transferir chamada para órgão competente (PMMG/PCMG).</p>
+                            <p><strong>Pergunta de Avaliação:</strong></p>
+                            <ul>
+                                <li>"A emergência é de competência de outro órgão do CIAD (Polícia Militar ou Polícia Civil)?"</li>
+                            </ul>
+                            <p><strong>Procedimento de Transferência:</strong></p>
+                            <ul>
+                                <li>Solicitar que o solicitante aguarde: "Senhor(a), aguarde enquanto transfiro sua ligação para o órgão responsável."</li>
+                                <li>Transferir para a cabine correta: <strong>190 (PMMG)</strong> ou <strong>197 (PCMG)</strong>.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
-          </div>
+                <!-- Conteúdo da Seção de Transferência SAMU -->
+                <div id="samu" class="dynamic-content" style="display:none;">
+                    <div id="question-container">
+                        <h3>Transferência para o SAMU</h3>
+                        <div id="guidance">
+                            <p><i class="bi bi-info-circle-fill guidance-icon"></i><strong>Orientações:</strong></p>
+                            <p><strong>Objetivo:</strong> Transferir chamadas de APH Clínico para as centrais SAMU.</p>
+                            <p><strong>Centrais SAMU e Municípios Atendidos:</strong></p>
+                            <ul>
+                                <li><strong>SAMU-BH:</strong> Belo Horizonte, Belo Vale, Caeté, Confins, Itabirito, Jaboticatubas, Lagoa Santa, Mariana, Matozinhos, Moeda, Nova Lima, Nova União, Ouro Preto, Pedro Leopoldo, Raposos, Ribeirão das Neves, Rio Acima, Sabará, Santa Luzia, Santana do Riacho, São José da Lapa, Taquaraçu de Minas, Vespasiano.</li>
+                                <li><strong>SAMU-Divinópolis:</strong> Aguanil, Araújos, Arcos, Bambuí, Bom Despacho, Bonfim, Brumadinho, Camacho, Campo Belo, Cana Verde, Candeias, Carmo da Mata, Carmo do Cajuru, Carmópolis de Minas, Cláudio, Conceição do Pará, Córrego Danta, Córrego Fundo, Cristais, Crucilândia, Divinópolis, Dores do Indaiá, Esmeraldas, Estrela do Indaiá, Florestal, Formiga, Igarapé, Igaratinga, Iguatama, Itaguara, Itapecerica, Itatiaiuçu, Itaúna, Japaraíba, Juatuba, Lagoa da Prata, Leandro Ferreira, Luz, Mário Campos, Martinho Campos, Mateus Leme, Medeiros, Moema, Nova Serrana, Oliveira, Onça de Pitangui, Pains, Pará de Minas, Passa Tempo, Pedra do Indaiá, Perdigão, Piedade dos Gerais, Piracema, Pitangui, Rio Manso, Santana do Jacaré, Santo Antônio do Amparo, Santo Antônio do Monte, São Francisco de Paula, São Gonçalo do Pará, São Joaquim de Bicas, São José da Varginha, São Sebastião do Oeste, Serra da Saudade, Tapiraí.</li>
+                                <li><strong>SAMU-Sete Lagoas:</strong> Araçaí, Baldim, Caetanópolis, Cachoeira da Prata, Cordisburgo, Fortuna de Minas, Inhaúma, Jequitibá, Maravilhas, Papagaios, Paraopeba, Pompéu, Santana de Pirapama, Sete Lagoas.</li>
+                                <li><strong>SAMU-Contagem:</strong> Contagem, Ibirité e Sarzedo.</li>
+                                <li><strong>SAMU-Betim:</strong> Betim.</li>
+                            </ul>
+                            <p><strong>Procedimento de Transferência:</strong></p>
+                            <ul>
+                                <li>Solicitar que o solicitante aguarde: "Senhor(a), aguarde enquanto transfiro sua ligação para o órgão responsável."</li>
+                                <li>Transferir para o ramal correto:
+                                    <ul>
+                                        <li><strong>192:</strong> SAMU-BH</li>
+                                        <li><strong>403:</strong> SAMU-Betim</li>
+                                        <li><strong>404:</strong> SAMU-Contagem</li>
+                                        <li><strong>405:</strong> SAMU-Sete Lagoas</li>
+                                        <li><strong>406:</strong> SAMU-Divinópolis</li>
+                                    </ul>
+                                </li>
+                                <li>Registrar no histórico da chamada: "Transferido para o SAMU. Atendente SAMU [nome do atendente do SAMU]."</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conteúdo da Seção de Consulta de Municípios SAMU -->
+                <div id="busca-samu" class="dynamic-content" style="display:none;">
+                    <div id="question-container">
+                        <h3>SAMU: Consulta de Municípios Atendidos</h3><br>
+                        <div class="samu-search-container">
+                            <input type="text" id="municipioInput" class="samu-input" placeholder="Digite o nome do município...">
+                            <button class="samu-btn" onclick="pesquisarMunicipio()">Pesquisar</button>
+                        </div>
+                        <div id="samu-result" class="samu-result"></div>
+                        <div id="guidance">
+                            <p><i class="bi bi-info-circle-fill guidance-icon"></i><strong>Orientações:</strong></p>
+                            <p><strong>Objetivo:</strong> Auxiliar na consulta rápida de municípios atendidos pelo SAMU.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conteúdo da Seção de Contato com Militares -->
+                <div id="militar" class="dynamic-content" style="display:none;">
+                    <div id="question-container">
+                        <h3>Contato de Militares com as Cabines do COBOM</h3>
+                        <div id="guidance">
+                            <p><i class="bi bi-info-circle-fill guidance-icon"></i><strong>Orientações:</strong></p>
+                            <p><strong>Contexto:</strong> Contato de militares com COBOM para orientações/informações.</p>
+                            <p><strong>Procedimento (Solicitação de Registro de Empenho):</strong></p>
+                            <ul>
+                                <li>Identificar patente e unidade do militar.</li>
+                                <li>Clicar no ícone do giroflex para iniciar criação da chamada.</li>
+                                <li>Preencher dados iniciais: solicitante (nome ou "anônimo"), telefone (confirmar DDD), natureza (grupo Q, X ou Y, ex: X 03.000 - empenho administrativo), endereço, envolvimento de militar, ocorrência "de destaque".</li>
+                            </ul>
+                            <p><strong>Procedimento (Solicitação de Contato com Equipe/Informações):</strong></p>
+                            <ul>
+                                <li>Identificar patente e unidade do militar.</li>
+                                <li>Solicitar que o solicitante aguarde: "Senhor(a), peço que aguarde enquanto transfiro sua ligação."</li>
+                                <li>Transferir para a cabine correta.</li>
+                                <li><strong>Linha Ocupada:</strong> Retornar imediatamente e informar: "Senhor(a), o ramal está ocupado, não é possível transferir no momento. O(a) senhor(a) pode tentar contato via rádio/tentar novamente mais tarde ou posso tentar encontrar outro militar disponível."</li>
+                                <li><strong>Solicitação de Outro Militar:</strong> Transferir para o Supervisor de Teleatendimento.</li>
+                                <li>Qualificar chamada como "apoio operacional &gt; transferência".</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conteúdo da Seção de Rechamadas -->
+                <div id="rechamadas" class="dynamic-content" style="display:none;">
+                    <div id="question-container">
+                        <h3>Rechamadas do Telefone 193</h3>
+                        <div id="guidance">
+                            <p><i class="bi bi-info-circle-fill guidance-icon"></i><strong>Orientações:</strong></p>
+                            <p><strong>Contexto:</strong> Sistema identifica rechamada por telefone ativo. Alerta de "Chamadas Similares" ao inserir endereço.</p>
+                            <p><strong>Procedimento Geral:</strong></p>
+                            <ul>
+                                <li>Se alertado, clicar em "Chamadas Similares".</li>
+                                <li><strong>Ocorrência Diferente:</strong> Prosseguir com criação de nova chamada.</li>
+                            </ul>
+                            <p><strong>Procedimento (Ocorrência em Andamento):</strong></p>
+                            <ul>
+                                <li>Verificar/completar dados faltantes na chamada existente.</li>
+                                <li>Incluir nome e novo telefone do solicitante no CAD.</li>
+                                <li>Informar ao solicitante: "Senhor(a), sua nova solicitação foi registrada, estamos nos esforçando para enviar uma viatura para atendimento."</li>
+                                <li> No caso de <strong>vistoria de enxame de insetos</strong>, informar ao solicitante: "O atendimento será realizado pelo critério de criticidade e em conformidade com disponibilidade de recursos"</li>
+                                <li> No caso de <strong>vistoria em risco de queda de árvore em via pública</strong>, informar ao solicitante: "Tente contato com a Prefeitura para ocorrências com árvores em via pública"</li>
+                                <li>Qualificar: "<i>Outros</i> &gt; <i>Rechamada</i>".</li>
+                            </ul>
+                            <p><strong>Procedimento (Despacho Tentou Contato):</strong></p>
+                            <ul>
+                                <li>Solicitar que o solicitante aguarde: "Senhor(a), peço que aguarde enquanto pego orientações."</li>
+                                <li>Contatar despacho para confirmar necessidade de contato e transferir a ligação (após registrar novos dados).</li>
+                            </ul>
+                            <p><strong>Procedimento (Perguntas sobre Atraso SEM Viatura Empenhada):</strong></p>
+                            <ul>
+                                <li>Informar: "Senhor(a), o atendimento é realizado conforme o grau de prioridade."</li>
+                                <li><strong>Insistência:</strong> Complementar: "O(a) senhor(a) já foi devidamente orientado(a), aguarde o atendimento da viatura."</li>
+                            </ul>
+                            <p><strong>Procedimento (Perguntas sobre Atraso COM Viatura Empenhada):</strong></p>
+                            <ul>
+                                <li>Informar: "Senhor(a), já há uma viatura a caminho. Caso desista, ligue 193 novamente para direcionarmos para outros atendimentos."</li>
+                                <li>Registrar no histórico: "Solicitante informado sobre envio de recurso."</li>
+                                <li>Transferir imediatamente para o Supervisor BM de Teleatendimento.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conteúdo da Seção de Agradecimentos e Reclamações -->
+                <div id="queixas" class="dynamic-content" style="display:none;">
+                    <div id="question-container">
+                        <h3>Agradecimentos e Reclamações</h3>
+                        <div id="guidance">
+                            <p><i class="bi bi-info-circle-fill guidance-icon"></i><strong>Orientações:</strong></p>
+                            <p><strong>Contexto: Tratar agradecimentos, queixas ou reclamações (CBMMG ou teleatendimento).</strong></p>
+                            <p><strong>Procedimento (Queixa: Desvio de Conduta – Ato em Flagrante/Recente):</strong></p>
+                            <ul>
+                                <li>Registrar como nova emergência (Natureza <strong>U 33.013</strong> - Atend. denúncia desvio conduta Bm/Pm/Pc/Militar/Autoridade).</li>
+                                <li>Solicitar que o solicitante aguarde: "Senhor(a), peço que aguarde enquanto transfiro sua ligação."</li>
+                                <li>Transferir para o Supervisor de Teleatendimento.</li>
+                            </ul>
+                            <p><strong>Procedimento (Queixa: Desvio de Conduta – Ação Passada):</strong></p>
+                            <ul>
+                                <li>Informar: "Para formalizar esta denúncia, procure a Corregedoria do CBMMG (www.bombeiros.mg.gov.br)."</li>
+                                <li>Verificar dúvidas. Sem dúvidas: encerrar com saudação.</li>
+                                <li><strong>Insistência:</strong> Informar: "Senhor(a), esta é uma linha de emergência. Sua ligação será encerrada!"</li>
+                                <li>Qualificar: "informação/orientação".</li>
+                            </ul>
+                            <p><strong>Procedimento (Queixa/Agradecimento por Serviços Prestados):</strong></p>
+                            <ul>
+                                <li>Informar: "Para formalizar, acesse o fale conosco no site do CBMMG (www.bombeiros.mg.gov.br). Receberá protocolo de acompanhamento."</li>
+                                <li>Verificar dúvidas. Sem dúvidas: encerrar com saudação.</li>
+                                <li><strong>Insistência:</strong> Informar: "Senhor(a), esta é uma linha de emergência. Sua ligação será encerrada!"</li>
+                                <li>Qualificar: "informação/orientação".</li>
+                            </ul>
+                            <p><strong>Procedimento (Queixa sobre Atuação Pm/Pc):</strong></p>
+                            <ul>
+                                <li>Solicitar que o solicitante aguarde: "Senhor(a), peço que aguarde enquanto transfiro sua ligação para o órgão responsável."</li>
+                                <li>Transferir para a cabine correta: <strong>190 (PMMG)</strong> ou <strong>197 (PCMG)</strong>.</li>
+                                <li>Qualificar: "Transferência &gt; Polícia Militar" ou "Transferência &gt; Polícia Civil".</li>
+                            </ul>
+                            <p><strong>Procedimento (Queixa sobre Atuação de Outro Órgão):</strong></p>
+                            <ul>
+                                <li>Aconselhar a ligar para <strong>181 (Disque Denúncia)</strong> ou número de emergência do órgão específico.</li>
+                                <li>Qualificar: "informações &gt; engano".</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conteúdo da Seção de Orientações e Informações -->
+                <div id="informacoes" class="dynamic-content" style="display:none;">
+                    <div id="question-container">
+                        <h3>Orientações e Informações</h3>
+                        <div id="guidance">
+                            <p><i class="bi bi-info-circle-fill guidance-icon"></i><strong>Orientações:</strong></p>
+                            <p><strong>Contexto:</strong> Identificar tipo de solicitação de informações (CBMMG).</p>
+                            <p><strong>Procedimento (Projetos Sociais, AVCB, etc.):</strong></p>
+                            <ul>
+                                <li>Solicitar que o solicitante aguarde: "Senhor(a), peço que aguarde enquanto transfiro sua ligação."</li>
+                                <li>Transferir para o Supervisor de Teleatendimento.</li>
+                                <li>Qualificar: "informações/orientações".</li>
+                            </ul>
+                            <p><strong>Procedimento (Orientações de Risco por Telefone: Incêndio, Vazamento de Gás):</strong></p>
+                            <ul>
+                                <li>Clicar no ícone do giroflex para iniciar criação da chamada.</li>
+                                <li>Preencher dados iniciais: solicitante (nome ou "anônimo"), telefone (confirmar DDD), natureza, endereço.</li>
+                                <li>Transferir para o Supervisor de Teleatendimento.</li>
+                                <li>Escrever no histórico: "Ligação transferida para o Supervisor de Teleatendimento para orientação."</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conteúdo da Seção de Chamadas Salvas -->
+                <div id="saved-calls" class="dynamic-content" style="display:none;">
+                    <div id="question-container">
+                        <h3>Chamadas Salvas</h3>
+                        <div id="guidance">
+                            <p><i class="bi bi-info-circle-fill guidance-icon"></i><strong>Orientações:</strong></p>
+                            <p><strong>Objetivo:</strong> Visualizar e revisar chamadas salvas.</p>
+                        </div>
+                        <div id="saved-calls-list"></div> <!-- Adicionado o elemento de lista de chamadas salvas -->
+                    </div>
+                </div>
+
+                <!-- Botão de Voltar e Painel de Histórico -->
+                <button id="back-btn" class="btn btn-secondary mt-3 d-none">
+                    <i class="bi bi-arrow-left"></i> Voltar
+                </button>
+                
+                <div id="history-panel" class="text-start">
+                    <h4><i class="bi bi-journal-check guidance-icon"></i> Resumo do Caminho Percorrido</h4>
+                    <div id="history-content"></div>
+                    <button id="copy-btn" class="btn btn-sm btn-success">
+                        <i class="bi bi-clipboard"></i> Copiar Resumo
+                    </button>
+                    <span id="copy-message" class="text-success ms-2" style="display:none;">Copiado!</span>
+                    <button id="save-call-btn" class="btn btn-sm btn-primary ms-2">
+                        <i class="bi bi-save"></i> Salvar Chamada
+                    </button>
+                    <span id="save-message" class="text-primary ms-2" style="display:none;">Salvo!</span>
+                </div>
+            </div>
         </div>
-      </div>
-
-    </main>
-  </div>
-
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Scripts de interação / busca SAMU (sem funções de chamadas salvas) -->
-  <script>
-    // Sidebar toggle
-    const sidebar = document.getElementById('sidebar');
-    const btnOpen = document.getElementById('btn-open-sidebar');
-    const btnClose = document.getElementById('btn-toggle-sidebar');
-
-    function openSidebar() { sidebar.classList.add('sidebar-open'); }
-    function closeSidebar() { sidebar.classList.remove('sidebar-open'); }
-
-    if (btnOpen) btnOpen.addEventListener('click', openSidebar);
-    if (btnClose) btnClose.addEventListener('click', closeSidebar);
-
-    // Menu navigation
-    document.querySelectorAll('#main-menu .nav-link').forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.querySelectorAll('#main-menu .nav-link').forEach(l => l.classList.remove('active'));
-        this.classList.add('active');
-
-        const target = this.getAttribute('data-target');
-        document.querySelectorAll('.dynamic-content').forEach(s => s.classList.add('d-none'));
-        const el = document.getElementById(target);
-        if (el) el.classList.remove('d-none');
-
-        if (window.innerWidth < 768) closeSidebar();
-      });
-    });
-
-    // Inicialização: mostra 'dados-cad' por padrão
-    document.addEventListener('DOMContentLoaded', () => {
-      const defaultSection = document.getElementById('dados-cad');
-      if (defaultSection) {
-        document.querySelectorAll('#main-menu .nav-link').forEach(l => l.classList.remove('active'));
-        const first = document.querySelector('#main-menu .nav-link[data-target="dados-cad"]');
-        if (first) first.classList.add('active');
-        document.querySelectorAll('.dynamic-content').forEach(s => s.classList.add('d-none'));
-        defaultSection.classList.remove('d-none');
-      }
-    });
-
-    // ======= SAMU: base de municípios (mesma que você tinha) =======
-    const gruposSamu = {
-      "SAMU-BH": ["Belo Horizonte", "Belo Vale", "Caeté", "Confins", "Itabirito", "Jaboticatubas", "Lagoa Santa", "Mariana", "Matozinhos", "Moeda", "Nova Lima", "Nova União", "Ouro Preto", "Pedro Leopoldo", "Raposos", "Ribeirão das Neves", "Rio Acima", "Sabará", "Santa Luzia", "Santana do Riacho", "São José da Lapa", "Taquaraçu de Minas", "Vespasiano"],
-      "SAMU-Divinópolis": ["Aguanil", "Araújos", "Arcos", "Bambuí", "Bom Despacho", "Bonfim", "Brumadinho", "Camacho", "Campo Belo", "Cana Verde", "Candeias", "Carmo da Mata", "Carmo do Cajuru", "Carmópolis de Minas", "Cláudio", "Conceição do Pará", "Córrego Danta", "Córrego Fundo", "Cristais", "Crucilândia", "Divinópolis", "Dores do Indaiá", "Esmeraldas", "Estrela do Indaiá", "Florestal", "Formiga", "Igarapé", "Igaratinga", "Iguatama", "Itaguara", "Itapecerica", "Itatiaiuçu", "Itaúna", "Japaraíba", "Juatuba", "Lagoa da Prata", "Leandro Ferreira", "Luz", "Mário Campos", "Martinho Campos", "Mateus Leme", "Medeiros", "Moema", "Nova Serrana", "Oliveira", "Onça de Pitangui", "Pains", "Pará de Minas", "Passa Tempo", "Pedra do Indaiá", "Perdigão", "Piedade dos Gerais", "Piracema", "Pitangui", "Rio Manso", "Santana do Jacaré", "Santo Antônio do Amparo", "Santo Antônio do Monte", "São Francisco de Paula", "São Gonçalo do Pará", "São Joaquim de Bicas", "São José da Varginha", "São Sebastião do Oeste", "Serra da Saudade", "Tapiraí"],
-      "SAMU-Sete Lagoas": ["Araçaí", "Baldim", "Caetanópolis", "Cachoeira da Prata", "Cordisburgo", "Fortuna de Minas", "Inhaúma", "Jequitibá", "Maravilhas", "Papagaios", "Paraopeba", "Pompéu", "Santana de Pirapama", "Sete Lagoas"],
-      "SAMU-Contagem": ["Contagem", "Ibirité", "Sarzedo"],
-      "SAMU-Betim": ["Betim"]
-    };
-
-    // Pesquisa de município SAMU
-    const btnPesquisar = document.getElementById('btn-pesquisar-samu');
-    if (btnPesquisar) {
-      btnPesquisar.addEventListener('click', pesquisarMunicipio);
-    }
-    // também pesquisa ao pressionar Enter
-    const municipioInput = document.getElementById('municipioInput');
-    if (municipioInput) {
-      municipioInput.addEventListener('keyup', function(e) {
-        if (e.key === 'Enter') pesquisarMunicipio();
-      });
-    }
-
-    function pesquisarMunicipio() {
-      const inputEl = document.getElementById('municipioInput');
-      const resultDiv = document.getElementById('samu-result');
-      if (!inputEl || !resultDiv) return;
-      const input = inputEl.value.trim();
-      if (input.length < 3) {
-        resultDiv.innerHTML = '<p class="text-danger">Digite pelo menos 3 caracteres para pesquisar.</p>';
-        return;
-      }
-      const normalizedInput = input.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      const resultados = [];
-
-      for (const [grupo, municipios] of Object.entries(gruposSamu)) {
-        const encontrados = municipios.filter(m => m.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(normalizedInput));
-        if (encontrados.length) resultados.push({ grupo, municipios: encontrados });
-      }
-
-      if (resultados.length === 0) {
-        resultDiv.innerHTML = `<p>Nenhum município encontrado para "<strong>${input}</strong>".</p>
-        <p class="text-muted">Se necessário, transfira ao Supervisor.</p>`;
-        return;
-      }
-
-      let html = `<p>Resultados para "<strong>${input}</strong>":</p>`;
-      resultados.forEach(r => {
-        html += `<div class="mb-2"><strong>${r.grupo}</strong><ul>${r.municipios.map(m => `<li>${m}</li>`).join('')}</ul></div>`;
-      });
-      resultDiv.innerHTML = html;
-    }
-
-  </script>
-
-</body>
-</html>
-
-  </script>
+    </div>
 
     <script>
         // Objeto Global para Armazenar Dados da Aplicação

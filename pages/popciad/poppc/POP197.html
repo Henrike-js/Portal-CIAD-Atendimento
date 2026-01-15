@@ -1,84 +1,234 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
+  <style>
+  
+  .logo-img {
+  height: 80px;
+}
+  #sidebar {
+  width: 220px;
+  background: #0d2b4d;
+  color: white;
+  min-height: 100vh;
+}
+
+#sidebar .nav-link {
+  color: #cfd8e3;
+  cursor: pointer;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-bottom: 4px;
+  transition: 0.2s;
+}
+
+#sidebar .nav-link:hover {
+  background: #1e4b7a;
+  color: #fff;
+}
+
+#sidebar .nav-link.active {
+  background: #2563eb;
+  color: #fff;
+  font-weight: bold;
+}
+
+.div-invisivel {
+  display: none;
+}
+</style>
 <head>
-  <meta charset="UTF-8">
-  <title>POP 197 – Em Desenvolvimento</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Telatendimento 197 – Polícia Civil</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<!-- ===== CABEÇALHO ===== -->
 <header class="page-header">
   <div class="header-inner">
-    <!-- LOGO -->
-    <img 
-      src="img/logo.png" 
-      alt="Logo Institucional" 
-      class="header-logo"
-    >
-
-    <!-- TEXTO DO CABEÇALHO -->
-    <div class="header-text">
-      <h1>POP 197 – PROCEDIMENTO OPERACIONAL PADRÃO</h1>
-      <p>
-        Centro Integrado de Atendimento e Despacho – CIAD<br>
-        Documento interno
-      </p>
-    </div>
+    <img src="img/logo.png" class="logo-img logo-index">
   </div>
 </header>
 
-<!-- ===== MENU ===== -->
-<nav class="menu-pills">
-  <ul>
-    <li><a href="#" class="active">Visão Geral</a></li>
-    <li><a href="#">Fundamentação</a></li>
-    <li><a href="#">Procedimentos</a></li>
-    <li><a href="#">Fluxograma</a></li>
-  </ul>
-</nav>
+<div id="app-root" class="d-flex">
 
-<!-- ===== CONTEÚDO ===== -->
-<main>
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="sidebar-body">
+    <div id="main-menu" class="nav flex-column mt-3">
+      <div class="nav-link active" onclick="showSection('triagem')">📞 Triagem 197</div>
+      <div class="nav-link" onclick="showSection('cad')">🧾 Registro PC</div>
+      <div class="nav-link" onclick="showSection('rechamadas')">🔁 Recontato</div>
+      <div class="nav-link" onclick="showSection('trote')">❌ Trote</div>
+    </div>
+  </div>
+</div>
 
-  <section>
-    <h2>📄 POP 197</h2>
-    <p>
-      Este Procedimento Operacional Padrão encontra-se em fase de elaboração.
-    </p>
-  </section>
+<!-- CONTEÚDO -->
+<div id="main-content" class="p-3 flex-fill">
 
-  <section>
-    <h2>🚧 Status</h2>
-    <p>
-      <strong>EM DESENVOLVIMENTO</strong>
-    </p>
-    <p>
-      O conteúdo deste POP será disponibilizado após finalização, revisão e
-      aprovação pelos setores competentes.
-    </p>
-  </section>
+<div class="card shadow-sm">
+<div class="card-body">
 
-  <section>
-    <h2>ℹ️ Observações</h2>
-    <ul>
-      <li>Manter o mesmo padrão visual dos POPs CIAD.</li>
-      <li>Fluxograma será incluído posteriormente.</li>
-      <li>Conteúdo sujeito a alterações.</li>
-    </ul>
-  </section>
+<!-- TRIAGEM -->
+<div id="triagem" class="dynamic-content">
+  <h4 id="question"></h4>
+  <div id="guidance" class="alert alert-primary"></div>
+  <div id="options" class="mb-2"></div>
+  <button class="btn btn-outline-secondary btn-sm" onclick="back()">⬅ Voltar</button>
 
-</main>
+  <label class="mt-3 fw-bold">📝 Bloco de Notas</label>
+  <textarea id="notepad" class="form-control" rows="7" placeholder="Registro do atendente 197..."></textarea>
+  <div class="mt-2">
+      <button class="btn btn-success btn-sm" onclick="copyNotes()">📋 Copiar</button>
+      <button class="btn btn-danger btn-sm" onclick="clearNotes()">🗑 Limpar</button>
+  </div>
+</div>
 
-<!-- ===== RODAPÉ ===== -->
-<footer>
-  Centro Integrado de Atendimento e Despacho – CIAD<br>
-  Uso interno • POP 197
-</footer>
+<!-- REGISTRO -->
+<div id="cad" class="dynamic-content div-invisivel">
+<h4>🧾 Registro de Ocorrência – Polícia Civil</h4>
+
+<div class="alert alert-primary">
+<strong>Objetivo:</strong> Registrar ocorrência no sistema da Polícia Civil para investigação ou providências.
+</div>
+
+<ul>
+<li>Nome do solicitante (ou Anônimo)</li>
+<li>Telefone com DDD</li>
+<li>Endereço completo</li>
+<li>Descrição detalhada dos fatos</li>
+<li>Identificação de envolvidos</li>
+<li>Vítimas e autores</li>
+</ul>
+</div>
+
+<!-- RECHAMADAS -->
+<div id="rechamadas" class="dynamic-content div-invisivel">
+<h4>🔁 Recontato do Cidadão</h4>
+<ul>
+<li>Verificar se já existe protocolo</li>
+<li>Atualizar informações</li>
+<li>Orientar andamento</li>
+</ul>
+</div>
+
+<!-- TROTE -->
+<div id="trote" class="dynamic-content div-invisivel">
+<h4>Trote</h4>
+<pre>Esta é uma linha oficial da Polícia Civil. A ligação será encerrada.</pre>
+</div>
+
+</div>
+</div>
+
+</div>
+</div>
+
+<script>
+// ===============================
+// ÁRVORE DE DECISÃO DO 197
+// ===============================
+const tree = {
+
+1:{
+q:"CENTO E NOVENTA E SETE. QUAL É SUA OCORRÊNCIA?",
+g:"Identificar o tipo de fato e se há urgência.",
+o:[
+ {text:"Óbito / cadáver",n:10},
+ {text:"Crime já ocorrido",n:20},
+ {text:"Pessoa desaparecida",n:30},
+ {text:"Mandado de prisão",n:40},
+ {text:"Ameaça / denúncia",n:50},
+ {text:"Informações",n:300},
+ {text:"Trote",n:400}
+]},
+
+10:{
+q:"O óbito ocorreu em hospital ou em local externo?",
+g:"Define o tipo de remoção.",
+o:[
+ {text:"Hospital",n:11},
+ {text:"Local de crime / acidente",n:12}
+]},
+
+11:{q:"Há médico que constatou o óbito?",g:"Necessário para remoção.",o:[{text:"Sim",n:150},{text:"Não",n:150}]},
+12:{q:"O local está preservado?",g:"Fundamental para perícia.",o:[{text:"Sim",n:150},{text:"Não",n:150}]},
+
+20:{
+q:"O autor está identificado?",
+g:"Ajuda na investigação.",
+o:[
+ {text:"Sim",n:150},
+ {text:"Não",n:200}
+]},
+
+30:{q:"É menor de idade?",g:"Prioridade.",o:[{text:"Sim",n:150},{text:"Não",n:200}]},
+40:{q:"Sabe onde o procurado está?",g:"Permite captura.",o:[{text:"Sim",n:150},{text:"Não",n:200}]},
+50:{q:"Há risco imediato?",g:"Encaminhar para PM.",o:[{text:"Sim",n:150},{text:"Não",n:200}]},
+
+150:{q:"AÇÃO DA POLÍCIA CIVIL",g:"Registrar ocorrência e acionar unidade competente.",o:[]},
+200:{q:"Fato pretérito",g:"Orientar registro na delegacia.",o:[]},
+300:{q:"Informação",g:"Orientar o cidadão.",o:[]},
+400:{q:"Trote",g:"Encerrar chamada.",o:[]}
+
+};
+
+let stack=[],cur=1;
+
+function render(){
+const n=tree[cur];
+question.innerText=n.q;
+guidance.innerText=n.g;
+options.innerHTML="";
+n.o.forEach(o=>{
+let b=document.createElement("button");
+b.className="btn btn-primary btn-sm me-1 mb-1";
+b.innerText=o.text;
+b.onclick=()=>{notepad.value+=n.q+" → "+o.text+"\n";stack.push(cur);cur=o.n;render();};
+options.appendChild(b);
+});
+}
+
+function back(){if(stack.length){cur=stack.pop();render();}}
+
+function showSection(id){
+  // esconder todos
+  document.querySelectorAll(".dynamic-content").forEach(s=>{
+    s.classList.add("div-invisivel");
+  });
+
+  // mostrar selecionado
+  const sec = document.getElementById(id);
+  if(sec) sec.classList.remove("div-invisivel");
+
+  // remover destaque
+  document.querySelectorAll("#main-menu .nav-link").forEach(l=>{
+    l.classList.remove("active");
+  });
+
+  // ativar botão correto
+  const btn = document.querySelector(`#main-menu .nav-link[onclick="showSection('${id}')"]`);
+  if(btn) btn.classList.add("active");
+}
+
+
+function copyNotes(){notepad.select();document.execCommand("copy");}
+function clearNotes(){if(confirm("Limpar bloco de notas?"))notepad.value="";}
+
+window.onload = ()=>{
+  notepad.value="";
+  render();
+  showSection("triagem"); // força abrir na triagem
+};
+</script>
 
 </body>
 </html>
-
-
