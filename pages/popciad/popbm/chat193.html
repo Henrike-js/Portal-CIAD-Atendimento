@@ -2,24 +2,22 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>COBOM 193 – Console Operacional</title>
+<title>COBOM 193 – Busca de Natureza</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
 
 <script src="roteiros_data.js"></script>
 
-
 <style>
 :root{
-  /* Identidade Visual PMMG (Azul) */
-  --pm-blue: #003366;       /* Azul Institucional */
-  --pm-dark: #001a33;       /* Azul Escuro */
-  --pm-light: #e6f0ff;      /* Azul Bem Claro (Hover) */
-  --pm-focus: #0044cc;      /* Azul Vibrante (Foco) */
-  --pm-bg: #f4f6f9;         /* Fundo Cinza Neutro */
-  --pm-alert: #ffc107;      /* Amarelo Alerta */
-  --pm-danger: #dc3545;     /* Vermelho (Apenas para erros/crítico) */
+  --pm-blue: #003366;
+  --pm-dark: #001a33;
+  --pm-light: #e6f0ff;
+  --pm-focus: #0044cc;
+  --pm-bg: #f4f6f9;
+  --pm-alert: #ffc107;
+  --pm-danger: #dc3545;
 }
 
 body {
@@ -46,7 +44,6 @@ body {
 }
 
 .brand-area { display: flex; align-items: center; gap: 15px; font-size: 1.2rem; font-weight: 700; }
-.logo-top { height: 40px; }
 .system-badge { background: rgba(255,255,255,0.15); padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-left: 10px; border: 1px solid rgba(255,255,255,0.2); }
 
 /* --- LAYOUT --- */
@@ -73,7 +70,6 @@ body {
 .command-card { border-left: 5px solid var(--pm-focus); padding: 20px; border-radius: 6px; background: #fff; border: 1px solid #eee; border-left-width: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin-bottom: 24px; }
 .command-text { font-size: 1.4rem; font-weight: 700; color: var(--pm-blue); }
 .command-hint { margin-top: 8px; font-size: 0.9rem; color: #777; font-style: italic; }
-.system-alert { background: #fff3cd; border: 1px solid #ffeeba; border-left: 5px solid var(--pm-alert); padding: 14px; border-radius: 6px; font-size: 0.9rem; margin-bottom: 20px; color: #856404; }
 
 /* BUSCA FASE 3 */
 .search-wrapper { position: relative; }
@@ -84,7 +80,7 @@ body {
 
 #notepad { flex: 1; font-family: 'Courier New', monospace; font-size: 0.95rem; border: 1px solid #ced4da; background-color: #fcfcfc; resize: none; color: #333; }
 
-/* --- ESTILOS DA FASE 3.5 (TELA CHEIA - BLUE THEME) --- */
+/* POP REVIEW */
 .pop-review-container { padding: 20px; max-width: 1200px; margin: 0 auto; }
 .pop-header-large { border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px; }
 .pop-title-code { font-size: 2.5rem; font-weight: 800; color: var(--pm-blue); }
@@ -93,8 +89,6 @@ body {
 .pop-label { font-size: 0.9rem; text-transform: uppercase; color: #666; font-weight: 700; margin-bottom: 10px; display: block; letter-spacing: 1px; }
 .pop-content-large { font-size: 1.1rem; line-height: 1.6; color: #333; white-space: pre-wrap; }
 .pop-actions-box { background: #e3f2fd; border-left: 8px solid var(--pm-focus); }
-
-/* Ajuste para conteúdo HTML dentro do JSON */
 .pop-content-large strong { color: var(--pm-blue); }
 .pop-content-large ul { padding-left: 20px; }
 
@@ -107,9 +101,9 @@ body {
         <div class="d-flex align-items-center">
             <span style="font-size: 24px; margin-right: 10px;">🚒</span>
             <span class="ms-2">COBOM 193</span>
-            <span class="system-badge">CORPO DE BOMBEIROS</span>
+            <span class="system-badge">MÓDULO DE CLASSIFICAÇÃO</span>
         </div>
-        <div class="small opacity-75 fw-normal">Doutrina 2025 | Atendente 193</div>
+        <div class="small opacity-75 fw-normal">Doutrina 2025</div>
     </div>
 </header>
 
@@ -118,18 +112,18 @@ body {
     <div id="sidebar">
         <div class="p-3 text-muted small fw-bold text-uppercase border-bottom bg-light">Menu Operacional</div>
         <div class="nav flex-column mt-2">
-            <div class="nav-link active" onclick="resetScript()">🔥 Novo Atendimento</div>
+            <div class="nav-link active" onclick="resetScript()">🔄 Nova Pesquisa</div>
         </div>
     </div>
 
     <div id="main-content">
         <div class="script-panel">
             <div class="script-header">
-                <span>SCRIPT INTERATIVO</span>
-                <span class="badge bg-danger text-white" id="step-badge">Fase 1</span>
+                <span>CLASSIFICAÇÃO DE OCORRÊNCIA</span>
+                <span class="badge bg-danger text-white" id="step-badge">Busca</span>
             </div>
             <div class="script-body" id="script-flow"></div>
-            <div class="p-3 border-top text-end bg-light">
+            <div class="p-3 border-top text-end bg-light" id="nav-buttons" style="display:none;">
                 <button class="btn btn-secondary btn-sm me-2" onclick="prevStep()">⬅️ Voltar</button>
                 <button class="btn btn-danger btn-sm px-4 fw-bold" onclick="nextStep()">Próxima Fase ➡️</button>
             </div>
@@ -137,8 +131,8 @@ body {
 
         <div class="data-panel">
             <div class="d-flex flex-column flex-grow-1">
-                <label class="form-label fw-bold text-danger small text-uppercase">📝 Histórico COBOM</label>
-                <textarea id="notepad" class="form-control" placeholder="Aguardando dados..."></textarea>
+                <label class="form-label fw-bold text-danger small text-uppercase">📝 Histórico / Seleção</label>
+                <textarea id="notepad" class="form-control" placeholder="Aguardando seleção..."></textarea>
             </div>
             <div class="d-flex gap-2 mt-3">
                 <button class="btn btn-success btn-sm w-100" onclick="copyNotes()">📋 Copiar</button>
@@ -153,7 +147,7 @@ body {
     <div class="modal-content">
       
       <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title fw-bold">⚠️ FASE 3.5 - REVISÃO OBRIGATÓRIA (POP BOMBEIROS)</h5>
+        <h5 class="modal-title fw-bold">⚠️ REVISÃO DO PROCEDIMENTO OPERACIONAL PADRÃO (POP)</h5>
       </div>
       
       <div class="modal-body bg-light">
@@ -189,10 +183,10 @@ body {
       
       <div class="modal-footer justify-content-center p-4" style="background: #e9ecef;">
         <button type="button" class="btn btn-outline-secondary btn-lg px-5 me-3" data-bs-dismiss="modal">
-            ❌ Cancelar / Trocar
+            ❌ Voltar para Busca
         </button>
         <button type="button" class="btn btn-danger btn-lg px-5 fw-bold shadow" onclick="confirmReview()">
-            ✅ CONFIRMAR E PROSSEGUIR
+            ✅ CONFIRMAR CLASSIFICAÇÃO
         </button>
       </div>
     
@@ -203,8 +197,7 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-// Tenta carregar dados da variável global se o arquivo JS foi carregado
-// Caso contrário, inicia array vazio.
+// Dados (fallback)
 let roteirosData = (typeof ROTEIROS_DATA !== 'undefined') ? ROTEIROS_DATA : [];
 
 let currentStep = 0;
@@ -212,77 +205,8 @@ let selectedNature = null;
 let tempNatureData = null;
 let reviewModalInstance = null;
 
+// APENAS FASE 3 (Natureza) MANTIDA
 const scriptSteps = [
-{
-    id: "abertura",
-    title: "ABERTURA",
-    content:`
-    <div class="command-card">
-      <div class="command-text">"Bombeiros, emergência?"</div>
-      <div class="command-hint">Fale com calma e firmeza. Identifique o solicitante.</div>
-    </div>
-    <div class="system-alert">⚠️ <strong>PRIORIDADE:</strong> Se houver risco iminente de morte (soterramento, afogamento, incêndio em local habitado), gere o despacho imediatamente.</div>
-    <div class="action-btn-group d-flex gap-2">
-      <button class="btn btn-lg btn-outline-danger flex-grow-1" onclick="logAction('Contato estabelecido')">🗣️ Cidadão Respondeu</button>
-      <button class="btn btn-lg btn-outline-secondary flex-grow-1" onclick="logAction('Chamada muda/Queda')">🔇 Chamada Muda</button>
-    </div>
-    
-    <div class="mt-2 p-2 rounded shadow-sm"
-     style="background:#fff3cd; border:1px solid #ffeeba; color:#856404; font-size:0.85rem; line-height:1.25;">
-
-
-  <strong>ORIENTAÇÕES AO ATENDENTE</strong><br><br>
-<strong>Saudação inicial:</strong><br>
-  Atenda a ligação dizendo:<br>
-  <em>“Bombeiros, emergência! Atendente [seu nome]. Bom dia / boa tarde / boa noite.”</em>
-  <br><br>
-  <strong>Perguntas essenciais:</strong>
-  <ul class="mb-2">
-    <li>Qual o seu nome? (Se não quiser informar, registre como <strong>Anônimo</strong>).</li>
-    <li>Qual é a sua emergência?</li>
-    <li>Qual o seu endereço? (Buscar referências do local da ocorrência).</li>
-  </ul>
-  <strong>Registro no CAD:</strong><br>
-  A chamada é criada no CAD após inserir os dados iniciais.
-  <br><br>
-  <strong>Regra dos 5W + H (sempre que possível):</strong>
-  <ul class="mb-2">
-    <li><strong>O que</strong> aconteceu? (ex: incêndio em casa, atropelamento)</li>
-    <li><strong>Onde</strong>? (local, referência, município)</li>
-    <li><strong>Quem</strong>? (nº de vítimas, perfil)</li>
-    <li><strong>Quando</strong>? (agora? há quanto tempo?)</li>
-    <li><strong>Como</strong>? (queda, colisão, explosão, etc.)</li>
-    <li><strong>Por quê</strong>? (se souber ou deduzir)</li>
-  </ul>
-  <strong>Comentários / Histórico (usar abreviações):</strong>
-  <ul class="mb-0">
-    <li><strong>SIT</strong>: Situação no local (ex: casa em chamas)</li>
-    <li><strong>VIT</strong>: Vítimas e condições (ex: 1 adulto consciente)</li>
-    <li><strong>REF</strong>: Referências adicionais</li>
-    <li><strong>TAC</strong>: Tempo do acontecimento (ex: 5 minutos)</li>
-  </ul>
-</div>
-
-    
-    
-    `
-         
-      
-
-
-},
-{
-    id: "localizacao",
-    title: "LOCALIZAÇÃO DO FATO",
-    content:`
-    <div class="command-card">
-      <div class="command-text">"Onde é a emergência?"</div>
-      <div class="command-hint">Município, Bairro, Rua, Número e <strong>Ponto de Referência</strong>.</div>
-    </div>
-    <label class="fw-bold text-secondary">Endereço informado:</label>
-    <input class="form-control form-control-lg mt-2 border-danger" placeholder="Ex: Av Amazonas, Centro, próx ao Banco X..." onblur="logInput('LOCAL',this.value)" autofocus>
-    <div class="text-muted small mt-2">💡 Confirme se é zona urbana ou rural (acesso difícil?).</div>`
-},
 {
     id: "natureza",
     title: "CLASSIFICAÇÃO DO SINISTRO",
@@ -302,30 +226,6 @@ const scriptSteps = [
     </div>
     
     <div id="nature-feedback" class="mt-3"></div>`
-},
-{
-    id: "seguranca",
-    title: "ANÁLISE DE RISCO",
-    content:`
-    <div class="command-card">
-      <div class="command-text">Avaliação de Cenário</div>
-      <div class="command-hint">Identifique riscos secundários para as equipes.</div>
-    </div>
-    <div class="d-grid gap-2">
-        <label class="btn btn-outline-danger text-start p-3 fw-bold text-dark"><input type="checkbox" class="me-2" onchange="logCheck('VÍTIMAS PRESAS ÀS FERRAGENS')"> 🚗 Vítimas presas / Encarceradas?</label>
-        <label class="btn btn-outline-warning text-start p-3 fw-bold text-dark"><input type="checkbox" class="me-2" onchange="logCheck('VAZAMENTO DE GÁS/PRODUTO QUÍMICO')"> ☣️ Vazamento de Gás / Prod. Perigoso?</label>
-        <label class="btn btn-outline-secondary text-start p-3 fw-bold text-dark"><input type="checkbox" class="me-2" onchange="logCheck('INCÊNDIO ALASTRANDO / ESTRUTURA COLPASANDO')"> 🔥 Fogo alastrando / Risco de Colapso?</label>
-    </div>`
-},
-{
-    id: "encerramento",
-    title: "DESPACHO",
-    content:`
-    <div class="command-card" style="border-left-color: #198754;">
-      <div class="command-text">"As viaturas foram acionadas."</div>
-      <div class="command-hint">Oriente: Sair do local de risco, aguardar em local seguro e sinalizar para a viatura.</div>
-    </div>
-    <button class="btn btn-success btn-lg w-100 py-4 fw-bold shadow-sm" onclick="resetScript()">✅ FINALIZAR ATENDIMENTO</button>`
 }
 ];
 
@@ -335,10 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
     renderStep();
     
     if(roteirosData.length === 0) {
-        // Fallback: Tenta carregar se o usuário não usou o script tag corretamente ou se precisar de fetch
-        // (Nota: Fetch local pode dar erro de CORS, por isso preferimos a variável global)
-        console.warn("Variável ROTEIROS_DATA vazia. Verifique a importação do script.");
-        document.getElementById('nature-feedback').innerHTML = '<div class="alert alert-warning">Aviso: Arquivo de roteiros não carregado. Verifique se roteiros_data.js está na pasta e importado.</div>';
+        console.warn("Variável ROTEIROS_DATA vazia.");
+        document.getElementById('nature-feedback').innerHTML = '<div class="alert alert-warning">Aviso: Roteiros não carregados.</div>';
     }
 });
 
@@ -347,11 +245,10 @@ function removeAcentos(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
-// --- NAVEGAÇÃO ---
+// --- NAVEGAÇÃO / RENDERIZAÇÃO ---
 function renderStep(){
   const step = scriptSteps[currentStep];
   document.getElementById('script-flow').innerHTML = step.content;
-  document.getElementById('step-badge').innerText = `Fase ${currentStep+1}: ${step.title}`;
   
   if(step.id === 'natureza'){
       const feedbackDiv = document.getElementById('nature-feedback');
@@ -359,35 +256,25 @@ function renderStep(){
       
       if(selectedNature) {
           input.value = `${selectedNature.codigo} - ${selectedNature.titulo}`;
-          input.classList.add('bg-danger', 'text-white'); // Vermelho para bombeiros
+          input.classList.add('bg-danger', 'text-white'); 
           input.disabled = true;
           feedbackDiv.innerHTML = `<div class="alert alert-success border-success">
             ✅ <strong>NATUREZA DEFINIDA.</strong><br>${selectedNature.titulo}.<br>
-            <button class="btn btn-sm btn-outline-dark mt-2" onclick="resetNatureSelection()">Alterar</button>
+            <button class="btn btn-sm btn-outline-dark mt-2" onclick="resetNatureSelection()">Nova Busca</button>
           </div>`;
       } else {
-          setTimeout(() => input.focus(), 100);
+          setTimeout(() => { if(input) input.focus(); }, 100);
       }
   }
 }
 
-function nextStep(){
-    if(scriptSteps[currentStep].id === 'natureza' && !selectedNature) {
-        alert("⛔ BLOQUEIO:\nSelecione o tipo de ocorrência e confirme o roteiro em tela cheia.");
-        return;
-    }
-    if(currentStep < scriptSteps.length-1){
-        currentStep++;
-        renderStep();
-    }
-}
-
-function prevStep(){ if(currentStep > 0){ currentStep--; renderStep(); } }
+// Funções de next/prev removidas pois não há mais passos, mas mantidas vazias para evitar erros se chamadas
+function nextStep(){}
+function prevStep(){}
 
 function resetScript(){
-  if(confirm('Iniciar novo atendimento 193?')){
-    currentStep=0; selectedNature=null; document.getElementById('notepad').value=''; renderStep();
-  }
+  // Reseta tudo para uma nova pesquisa
+  selectedNature=null; document.getElementById('notepad').value=''; renderStep();
 }
 
 function resetNatureSelection() {
@@ -403,12 +290,9 @@ function searchNature(q){
   d.innerHTML = '';
   const termoLimpo = removeAcentos(q.toLowerCase());
   
-  // Adaptação para os campos do novo arquivo JS (codigo, titulo, descricao)
   const matches = roteirosData.filter(i => {
-      // Removemos tags HTML para a busca não quebrar com <strong> etc
       const descLimpa = (i.descricao || "").replace(/<[^>]*>?/gm, '');
       const roteiroLimpo = (i.roteiro || "").replace(/<[^>]*>?/gm, '');
-      
       const textoSearch = (i.codigo + ' ' + i.titulo + ' ' + descLimpa + ' ' + roteiroLimpo).toLowerCase();
       return removeAcentos(textoSearch).includes(termoLimpo);
   }).slice(0, 15);
@@ -430,16 +314,11 @@ function searchNature(q){
 // --- FASE 3.5: LÓGICA DE REVISÃO ---
 function openReviewMode(item) {
     tempNatureData = item;
-    
-    // Mapeamento dos campos do novo arquivo
     document.getElementById('rev-code').innerText = item.codigo;
     document.getElementById('rev-title').innerText = item.titulo;
-    
-    // Usamos innerHTML para renderizar as tags <strong> do arquivo
     document.getElementById('rev-desc').innerHTML = item.descricao || "Sem descrição.";
     document.getElementById('rev-action').innerHTML = item.roteiro || "Verificar Procedimento Padrão.";
     
-    // Abre Modal
     reviewModalInstance.show();
     document.getElementById('nature-results').classList.remove('active');
 }
@@ -449,26 +328,19 @@ function confirmReview() {
     
     selectedNature = tempNatureData;
     
-    // Log
+    // Log apenas do código selecionado
     const notepad = document.getElementById('notepad');
     const hora = new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
-    notepad.value += `[${hora}] COD: ${selectedNature.codigo} - ${selectedNature.titulo}\n`;
+    notepad.value += `[${hora}] SELEÇÃO: ${selectedNature.codigo} - ${selectedNature.titulo}\n`;
     notepad.scrollTop = notepad.scrollHeight;
     
     reviewModalInstance.hide();
     
     renderStep();
-    setTimeout(() => nextStep(), 500);
+    // AQUI: Não avançamos mais nextStep(), pois não há mais fases. A tela atualiza com o feedback verde.
 }
 
-// --- LOGS GERAIS ---
-function logAction(t){
-    const hora = new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
-    document.getElementById('notepad').value += `[${hora}] AÇÃO: ${t}\n`;
-    nextStep();
-}
-function logInput(l,v){if(v) document.getElementById('notepad').value += `🔹 ${l}: ${v}\n`;}
-function logCheck(t){document.getElementById('notepad').value += `⚠️ ALERTA: ${t}\n`;}
+// --- UTILITÁRIOS ---
 function copyNotes(){
     document.getElementById('notepad').select();
     navigator.clipboard.writeText(document.getElementById('notepad').value);
