@@ -2,225 +2,203 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>COPOM 190 – Console Operacional</title>
+<title>Polícia Militar - Busca de Natureza (POP)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
+/* =========================
+   IDENTIDADE VISUAL PM
+   ========================= */
 :root{
   --pm-blue:#1f3a5f;
-  --pm-dark:#142640;
+  --pm-blue-dark:#142640;
   --pm-focus:#0d6efd;
   --pm-bg:#f0f2f5;
-  --pm-alert:#ffc107;
+  --pm-border:#d0d7de;
 }
 
-body {
-  font-family: 'Source Sans Pro', sans-serif;
+body{
   background: var(--pm-bg);
-  height: 100vh;
-  overflow: hidden;
+  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+/* HEADER */
+.pm-header{
+  background: var(--pm-blue);
+  color: #fff;
+  height: 64px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  padding: 0 24px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.25);
 }
 
-/* --- HEADER --- */
-.top-header {
-    height: 60px;
-    background-color: var(--pm-blue);
-    color: white;
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    z-index: 1000;
-    flex-shrink: 0;
+.pm-header h1{
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
 }
 
-.brand-area { display: flex; align-items: center; gap: 15px; font-size: 1.2rem; font-weight: 700; }
-.logo-top { height: 40px; }
-.system-badge { background: rgba(255,255,255,0.15); padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-left: 10px; }
-
-/* --- LAYOUT --- */
-#app-root { display: flex; flex: 1; overflow: hidden; }
-
-/* SIDEBAR */
-#sidebar { width: 240px; background: white; border-right: 1px solid #ddd; display: flex; flex-direction: column; }
-#sidebar .nav-link { color: #555; padding: 15px 20px; font-weight: 600; cursor: pointer; border-left: 4px solid transparent; transition: 0.2s; }
-#sidebar .nav-link:hover { background: #f8f9fa; color: var(--pm-blue); }
-#sidebar .nav-link.active { background: #eef5ff; color: var(--pm-blue); border-left-color: var(--pm-focus); }
-
-/* MAIN */
-#main-content { flex: 1; display: flex; gap: 16px; padding: 20px; background: var(--pm-bg); overflow: hidden; }
-
-/* SCRIPT PANEL */
-.script-panel { flex: 2.2; background: white; border-radius: 8px; display: flex; flex-direction: column; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #e0e6ed; overflow: hidden; }
-.script-header { background: #f8f9fa; color: var(--pm-blue); padding: 12px 20px; font-size: 1rem; font-weight: 700; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; }
-.script-body { padding: 24px; overflow-y: auto; flex: 1; position: relative; }
-
-/* DATA PANEL */
-.data-panel { flex: 1; background: white; border: 1px solid #e0e6ed; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-
-/* CARDS E ALERTAS */
-.command-card { border-left: 5px solid var(--pm-focus); padding: 20px; border-radius: 6px; background: #fff; border: 1px solid #eee; border-left-width: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin-bottom: 24px; }
-.command-text { font-size: 1.4rem; font-weight: 700; color: #2c3e50; }
-.command-hint { margin-top: 8px; font-size: 0.9rem; color: #777; font-style: italic; }
-.system-alert { background: #fff3cd; border: 1px solid #ffeeba; border-left: 5px solid var(--pm-alert); padding: 14px; border-radius: 6px; font-size: 0.9rem; margin-bottom: 20px; color: #856404; }
-
-/* BUSCA FASE 3 */
-.search-wrapper { position: relative; }
-.results-list { max-height: 250px; overflow-y: auto; border: 1px solid #ced4da; border-top: none; display: none; position: absolute; width: 100%; background: white; z-index: 1000; box-shadow: 0 10px 20px rgba(0,0,0,0.15); border-radius: 0 0 8px 8px; }
-.results-list.active { display: block; }
-.result-item { padding: 12px; border-bottom: 1px solid #eee; cursor: pointer; }
-.result-item:hover { background: #eef5ff; color: var(--pm-blue); font-weight: 700; }
-
-#notepad { flex: 1; font-family: 'Courier New', monospace; font-size: 0.95rem; border: 1px solid #ced4da; background-color: #fcfcfc; resize: none; color: #333; }
-
-/* --- ESTILOS DA FASE 3.5 (TELA CHEIA) --- */
-.pop-review-container {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+.pm-header span{
+  font-size: .8rem;
+  background: rgba(255,255,255,.15);
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-left: 12px;
+  font-weight: 600;
 }
-.pop-header-large {
-    border-bottom: 2px solid #eee;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
+
+/* CONTEÚDO */
+.main-container{
+  max-width: 820px;
+  margin: 40px auto;
+  padding: 0 20px;
 }
-.pop-title-code {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--pm-blue);
+
+/* BUSCA */
+.search-wrapper{
+  position: relative;
 }
-.pop-title-text {
-    font-size: 1.8rem;
-    color: #555;
-    font-weight: 600;
+
+.search-label{
+  font-weight: 700;
+  color: var(--pm-blue-dark);
+  text-transform: uppercase;
+  font-size: .8rem;
+  margin-bottom: 6px;
 }
-.pop-section-box {
-    background: #f8f9fa;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 25px;
-    margin-bottom: 20px;
+
+.results-list{
+  max-height: 320px;
+  overflow-y: auto;
+  border: 1px solid var(--pm-border);
+  border-top: none;
+  display: none;
+  position: absolute;
+  width: 100%;
+  background: #fff;
+  z-index: 1000;
+  box-shadow: 0 10px 20px rgba(0,0,0,.2);
+  border-radius: 0 0 8px 8px;
 }
-.pop-label {
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    color: #666;
-    font-weight: 700;
-    margin-bottom: 10px;
-    display: block;
-    letter-spacing: 1px;
+
+.results-list.active{ display:block; }
+
+.result-item{
+  padding: 14px 16px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  font-size: .95rem;
 }
-.pop-content-large {
-    font-size: 1.2rem;
-    line-height: 1.6;
-    color: #333;
-    white-space: pre-wrap;
+
+.result-item:hover{
+  background:#eef5ff;
+  color: var(--pm-blue);
+  font-weight: 700;
 }
-.pop-actions-box {
-    background: #e3f2fd; /* Azul bem claro */
-    border-left: 8px solid #0d6efd;
+
+/* MODAL POP */
+.pop-title-code{
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--pm-blue);
+}
+
+.pop-title-text{
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.pop-box{
+  background: #fff;
+  border: 1px solid var(--pm-border);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.pop-label{
+  font-size: .75rem;
+  font-weight: 700;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: block;
+  letter-spacing: .5px;
+}
+
+.pop-actions{
+  background: #e3f2fd;
+  border-left: 6px solid var(--pm-focus);
 }
 </style>
 </head>
+
 <body>
 
-<header class="top-header">
-    <div class="brand-area w-100 d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center">
-            <img src="img/logo.png" class="logo-top" alt="Logo" onerror="this.style.display='none'">
-            <span class="ms-3">CIAD</span>
-            <span class="system-badge">CONSOLE OPERACIONAL</span>
-        </div>
-    </div>
+<!-- HEADER -->
+<header class="pm-header">
+  <h1>Polícia Militar</h1>
+  <span>Busca de Natureza • POP</span>
 </header>
 
-<div id="app-root">
+<!-- CONTEÚDO -->
+<div class="main-container">
 
-    <div id="sidebar">
-        <div class="p-3 text-muted small fw-bold text-uppercase border-bottom bg-light">Menu Principal</div>
-        <div class="nav flex-column mt-2">
-            <div class="nav-link active" onclick="resetScript()">🔄 Novo Atendimento</div>
-        </div>
-    </div>
+  <div class="search-wrapper">
+    <label class="search-label">Pesquisar Natureza (POP)</label>
+    <input id="nature-input"
+           class="form-control form-control-lg border-primary"
+           placeholder="Ex: roubo, acidente, ameaça..."
+           onkeyup="searchNature(this.value)"
+           autocomplete="off">
 
-    <div id="main-content">
-        <div class="script-panel">
-            <div class="script-header">
-                <span>SCRIPT INTERATIVO</span>
-                <span class="badge bg-warning text-dark" id="step-badge">Fase 1</span>
-            </div>
-            <div class="script-body" id="script-flow"></div>
-            <div class="p-3 border-top text-end bg-light">
-                <button class="btn btn-secondary btn-sm me-2" onclick="prevStep()">⬅️ Voltar</button>
-                <button class="btn btn-primary btn-sm px-4 fw-bold" onclick="nextStep()">Próxima Fase ➡️</button>
-            </div>
-        </div>
+    <div id="nature-results" class="results-list"></div>
+  </div>
 
-        <div class="data-panel">
-            <div class="d-flex flex-column flex-grow-1">
-                <label class="form-label fw-bold text-secondary small text-uppercase">📝 Histórico CAD</label>
-                <textarea id="notepad" class="form-control" placeholder="Aguardando dados..."></textarea>
-            </div>
-            <div class="d-flex gap-2 mt-3">
-                <button class="btn btn-success btn-sm w-100" onclick="copyNotes()">📋 Copiar</button>
-                <button class="btn btn-outline-danger btn-sm w-100" onclick="clearNotes()">🗑 Limpar</button>
-            </div>
-        </div>
-    </div>
 </div>
 
-<div class="modal fade" id="reviewModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+<!-- MODAL FULLSCREEN -->
+<div class="modal fade" id="reviewModal" tabindex="-1">
   <div class="modal-dialog modal-fullscreen">
     <div class="modal-content">
-      
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title fw-bold">⚠️ FASE 3.5 - REVISÃO OBRIGATÓRIA DE NATUREZA (POP)</h5>
-        </div>
-      
+
+      <div class="modal-header" style="background:var(--pm-blue);color:#fff;">
+        <h5 class="modal-title fw-bold">Revisão Obrigatória da Natureza (POP)</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
       <div class="modal-body bg-light">
-        <div class="pop-review-container">
-            
-            <div class="pop-header-large text-center">
-                <div class="pop-title-code" id="rev-code">---</div>
-                <div class="pop-title-text" id="rev-title">---</div>
+        <div class="container">
+
+          <div class="text-center mb-4">
+            <div class="pop-title-code" id="rev-code">---</div>
+            <div class="pop-title-text" id="rev-title">---</div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="pop-box h-100">
+                <span class="pop-label">O que caracteriza este fato</span>
+                <div id="rev-desc">---</div>
+              </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="pop-section-box h-100">
-                        <span class="pop-label">📖 O que caracteriza este fato?</span>
-                        <div class="pop-content-large" id="rev-desc">---</div>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="pop-section-box pop-actions-box h-100">
-                        <span class="pop-label text-primary">⚡ Ações do Atendente (POP)</span>
-                        <div class="pop-content-large fw-bold" id="rev-action">---</div>
-                        <hr>
-                        <div class="alert alert-warning mt-3 mb-0 small">
-                            <i class="fw-bold">Atenção:</i> Certifique-se de coletar todas as informações acima antes de liberar a viatura.
-                        </div>
-                    </div>
-                </div>
+            <div class="col-md-6">
+              <div class="pop-box pop-actions h-100">
+                <span class="pop-label text-primary">Ações do Atendente (POP)</span>
+                <div class="fw-bold" id="rev-action">---</div>
+              </div>
             </div>
+          </div>
 
         </div>
       </div>
-      
-      <div class="modal-footer justify-content-center p-4" style="background: #e9ecef;">
-        <button type="button" class="btn btn-outline-danger btn-lg px-5 me-3" data-bs-dismiss="modal">
-            ❌ Cancelar / Trocar Natureza
-        </button>
-        <button type="button" class="btn btn-success btn-lg px-5 fw-bold shadow" onclick="confirmReview()">
-            ✅ CIENTE E CONFIRMAR (Prosseguir)
-        </button>
-      </div>
-    
+
     </div>
   </div>
 </div>
@@ -228,229 +206,76 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-let roteirosData=[];
-let currentStep=0;
-let selectedNature = null;
-let tempNatureData = null;
-let reviewModalInstance = null;
+let roteirosData = [];
+let reviewModal;
 
-const scriptSteps=[
-{
-    id: "abertura",
-    title: "ABERTURA",
-    content:`
-    <div class="command-card">
-      <div class="command-text">"Polícia Militar, emergência?"</div>
-      <div class="command-hint">Fale com firmeza. Aguarde a resposta do cidadão.</div>
-    </div>
-    <div class="system-alert">⚠️ <strong>ALERTA:</strong> Se não houver resposta, repita 2 vezes. Ruídos de agressão = Ocorrência Imediata.</div>
-    <div class="action-btn-group d-flex gap-2">
-      <button class="btn btn-lg btn-outline-primary flex-grow-1" onclick="logAction('Contato estabelecido')">🗣️ Respondeu</button>
-      <button class="btn btn-lg btn-outline-danger flex-grow-1" onclick="logAction('Chamada muda - Protocolo')">🔇 Chamada Muda</button>
-    </div>`
-},
-{
-    id: "localizacao",
-    title: "LOCALIZAÇÃO",
-    content:`
-    <div class="command-card">
-      <div class="command-text">"Onde está a acontecer agora?"</div>
-      <div class="command-hint">Prioridade: Cidade, Bairro e Referência.</div>
-    </div>
-    <label class="fw-bold text-secondary">Endereço informado:</label>
-    <input class="form-control form-control-lg mt-2 border-primary" placeholder="Ex: Av Amazonas, Centro..." onblur="logInput('LOCAL',this.value)" autofocus>
-    <div class="text-muted small mt-2">💡 Confirme no mapa do SILOC.</div>`
-},
-{
-    id: "natureza",
-    title: "CLASSIFICAÇÃO DO FATO",
-    content:`
-    <div class="command-card">
-      <div class="command-text">"O que está a acontecer?"</div>
-      <div class="command-hint">Pesquise a natureza abaixo. O sistema abrirá a revisão em tela cheia.</div>
-    </div>
-    
-    <div class="search-wrapper">
-        <label class="fw-bold mb-1 text-danger">🔍 Pesquisar Natureza (POP)</label>
-        <div class="input-group">
-            <span class="input-group-text bg-white"><i class="text-muted">🔎</i></span>
-            <input id="nature-input" class="form-control form-control-lg border-primary" placeholder="Digite o fato (ex: roubo, acidente)..." onkeyup="searchNature(this.value)" autocomplete="off">
-        </div>
-        <div id="nature-results" class="results-list"></div>
-    </div>
-    
-    <div id="nature-feedback" class="mt-3"></div>`
-},
-{
-    id: "seguranca",
-    title: "SEGURANÇA DA EQUIPE",
-    content:`
-    <div class="command-card">
-      <div class="command-text">Perguntas de Segurança</div>
-      <div class="command-hint">Informações vitais para a guarnição.</div>
-    </div>
-    <div class="d-grid gap-2">
-        <label class="btn btn-outline-danger text-start p-3 fw-bold"><input type="checkbox" class="me-2" onchange="logCheck('ARMA DE FOGO')"> 🔫 Há armas de fogo?</label>
-        <label class="btn btn-outline-warning text-start p-3 fw-bold text-dark"><input type="checkbox" class="me-2" onchange="logCheck('VÍTIMA FERIDA')"> 🚑 Há feridos?</label>
-        <label class="btn btn-outline-secondary text-start p-3 fw-bold text-dark"><input type="checkbox" class="me-2" onchange="logCheck('AUTORES PRESENTES')"> 🏃 Autores no local?</label>
-    </div>`
-},
-{
-    id: "encerramento",
-    title: "DESPACHO",
-    content:`
-    <div class="command-card" style="border-left-color: #198754;">
-      <div class="command-text">"A viatura foi acionada."</div>
-      <div class="command-hint">Forneça o protocolo e encerre.</div>
-    </div>
-    <button class="btn btn-success btn-lg w-100 py-4 fw-bold shadow-sm" onclick="resetScript()">✅ FINALIZAR ATENDIMENTO</button>`
-}
-];
-
-// --- INICIALIZAÇÃO ---
-document.addEventListener('DOMContentLoaded', () => {
-    loadJSON();
-    reviewModalInstance = new bootstrap.Modal(document.getElementById('reviewModal'));
-    renderStep();
+/* INIT */
+document.addEventListener('DOMContentLoaded', async ()=>{
+  reviewModal = new bootstrap.Modal(document.getElementById('reviewModal'));
+  await loadJSON();
 });
 
-function removeAcentos(str) {
-    if (!str) return "";
-    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+/* UTIL */
+function removeAcentos(str){
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 }
 
-// --- NAVEGAÇÃO ---
-function renderStep(){
-  const step = scriptSteps[currentStep];
-  document.getElementById('script-flow').innerHTML = step.content;
-  document.getElementById('step-badge').innerText = `Fase ${currentStep+1}: ${step.title}`;
-  
-  // Lógica da Fase 3
-  if(step.id === 'natureza'){
-      const feedbackDiv = document.getElementById('nature-feedback');
-      const input = document.getElementById('nature-input');
-      
-      if(selectedNature) {
-          input.value = `${selectedNature.NATUREZA} - ${selectedNature.TÍTULO}`;
-          input.classList.add('bg-success', 'text-white');
-          input.disabled = true;
-          feedbackDiv.innerHTML = `<div class="alert alert-success">
-            ✅ <strong>POP VALIDADO.</strong> Natureza: ${selectedNature.TÍTULO}.<br>
-            <button class="btn btn-sm btn-outline-success mt-2" onclick="resetNatureSelection()">Alterar</button>
-          </div>`;
-      } else {
-          setTimeout(() => input.focus(), 100);
-      }
-  }
-}
-
-function nextStep(){
-    if(scriptSteps[currentStep].id === 'natureza' && !selectedNature) {
-        alert("⛔ BLOQUEIO:\nSelecione uma natureza e confirme o procedimento em tela cheia.");
-        return;
-    }
-    if(currentStep < scriptSteps.length-1){
-        currentStep++;
-        renderStep();
-    }
-}
-
-function prevStep(){ if(currentStep > 0){ currentStep--; renderStep(); } }
-
-function resetScript(){
-  if(confirm('Iniciar novo atendimento?')){
-    currentStep=0; selectedNature=null; document.getElementById('notepad').value=''; renderStep();
-  }
-}
-
-function resetNatureSelection() {
-    selectedNature = null;
-    renderStep();
-}
-
-// --- JSON ---
+/* LOAD JSON */
 async function loadJSON(){
-  try {
-      const r = await fetch('roteiros190.json');
-      roteirosData = await r.json();
-  } catch(e) { console.error(e); }
-}
-
-// --- BUSCA ---
-function searchNature(q){
-  const d = document.getElementById('nature-results');
-  if(q.length < 2) { d.classList.remove('active'); return; }
-  
-  d.innerHTML = '';
-  const termoLimpo = removeAcentos(q.toLowerCase());
-  const matches = roteirosData.filter(i => {
-      const textoLimpo = removeAcentos((i.NATUREZA + ' ' + i.TÍTULO + ' ' + (i.DESCRIÇÃO || '')).toLowerCase());
-      return textoLimpo.includes(termoLimpo);
-  }).slice(0, 15);
-
-  if(matches.length === 0) {
-      d.innerHTML = "<div class='p-3 text-muted'>Sem resultados.</div>";
-  } else {
-      matches.forEach(i => {
-        const div = document.createElement('div');
-        div.className = 'result-item';
-        div.innerHTML = `<span class="badge bg-primary me-2">${i.NATUREZA}</span> <strong>${i.TÍTULO}</strong>`;
-        div.onclick = () => openReviewMode(i); // AQUI CHAMA A TELA CHEIA
-        d.appendChild(div);
-      });
+  try{
+    const r = await fetch("roteiros190.json");
+    roteirosData = await r.json();
+  }catch(e){
+    alert("Erro ao carregar o arquivo roteiros190.json");
   }
-  d.classList.add('active');
 }
 
-// --- FASE 3.5: LÓGICA DE REVISÃO ---
-function openReviewMode(item) {
-    tempNatureData = item;
-    
-    // Preenche Tela Cheia
-    document.getElementById('rev-code').innerText = item.NATUREZA;
-    document.getElementById('rev-title').innerText = item.TÍTULO;
-    document.getElementById('rev-desc').innerText = item.DESCRIÇÃO || "Sem descrição.";
-    document.getElementById('rev-action').innerText = item.AÇÕES || "Verificar POP padrão.";
-    
-    // Abre Modal Fullscreen
-    reviewModalInstance.show();
-    document.getElementById('nature-results').classList.remove('active');
+/* BUSCA */
+function searchNature(q){
+  const list = document.getElementById("nature-results");
+  if(q.length < 2){
+    list.classList.remove("active");
+    return;
+  }
+
+  list.innerHTML = "";
+  const termo = removeAcentos(q.toLowerCase());
+
+  const matches = roteirosData.filter(i=>{
+    const texto = removeAcentos(
+      (i.NATUREZA+" "+i.TÍTULO+" "+(i.DESCRIÇÃO||"")).toLowerCase()
+    );
+    return texto.includes(termo);
+  }).slice(0,15);
+
+  if(matches.length === 0){
+    list.innerHTML = "<div class='p-3 text-muted'>Nenhum resultado encontrado</div>";
+  }else{
+    matches.forEach(i=>{
+      const div = document.createElement("div");
+      div.className = "result-item";
+      div.innerHTML = `<span class="badge bg-primary me-2">${i.NATUREZA}</span>${i.TÍTULO}`;
+      div.onclick = ()=>openReview(i);
+      list.appendChild(div);
+    });
+  }
+
+  list.classList.add("active");
 }
 
-function confirmReview() {
-    if(!tempNatureData) return;
-    
-    selectedNature = tempNatureData;
-    
-    // Log
-    const notepad = document.getElementById('notepad');
-    const hora = new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
-    notepad.value += `[${hora}] NATUREZA: ${selectedNature.NATUREZA} - ${selectedNature.TÍTULO}\n`;
-    notepad.scrollTop = notepad.scrollHeight;
-    
-    reviewModalInstance.hide();
-    
-    // Avança automaticamente para Segurança após confirmar POP
-    renderStep();
-    setTimeout(() => nextStep(), 500);
-}
+/* MODAL */
+function openReview(item){
+  document.getElementById("rev-code").innerText = item.NATUREZA;
+  document.getElementById("rev-title").innerText = item.TÍTULO;
+  document.getElementById("rev-desc").innerText = item.DESCRIÇÃO || "Sem descrição.";
+  document.getElementById("rev-action").innerText = item.AÇÕES || "POP padrão.";
 
-// --- LOGS GERAIS ---
-function logAction(t){
-    const hora = new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
-    document.getElementById('notepad').value += `[${hora}] AÇÃO: ${t}\n`;
-    nextStep();
+  document.getElementById("nature-results").classList.remove("active");
+  reviewModal.show();
 }
-function logInput(l,v){if(v) document.getElementById('notepad').value += `🔹 ${l}: ${v}\n`;}
-function logCheck(t){document.getElementById('notepad').value += `⚠️ ALERTA: ${t}\n`;}
-function copyNotes(){
-    document.getElementById('notepad').select();
-    navigator.clipboard.writeText(document.getElementById('notepad').value);
-}
-function clearNotes(){
-    if(confirm("Limpar histórico?")) document.getElementById('notepad').value='';
-}
-
 </script>
+
 </body>
 </html>
+
+
