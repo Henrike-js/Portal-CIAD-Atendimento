@@ -62,49 +62,81 @@ $registro = $result->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<title>Editar Histórico</title>
+    <meta charset="UTF-8">
+    <title>Editar Histórico</title>
 
-<style>
-body{font-family:Arial;background:#f4f4f4;padding:20px}
-form{background:white;padding:20px;border-radius:8px;max-width:700px}
-textarea{width:100%;border:1px solid #ccc;border-radius:6px;padding:10px}
-small{color:#666}
-button{padding:10px 18px;background:#16325C;color:white;border:0;border-radius:6px;cursor:pointer}
-a{margin-left:10px}
-</style>
+    <!-- Fontes -->
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
 
+    <!-- CSS principal -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<h2>Editar Histórico – Chamada #<?= $registro['id'] ?></h2>
+<div class="page">
 
-<form method="post">
+    <!-- TOPO -->
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="logo-wrapper">
+                <img src="logo.png" alt="Logo" class="logo-sisp-img">
+            </div>
+
+            <div class="clock-wrapper">
+                <div class="clock-time"><?= date('H:i') ?></div>
+                <div class="clock-date"><?= date('d/m/Y') ?></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO -->
+    <main class="main">
+        <div class="main-inner">
+
+            <div class="page-header">
+                <h1>Editar Histórico</h1>
+                <p>Chamada nº <?= $registro['id'] ?></p>
+            </div>
+
+           <form method="post" style="width:100%">
 
     <input type="hidden" name="id" value="<?= $registro['id'] ?>">
 
-    <label>Histórico atual (não pode alterar)</label><br>
-    <textarea readonly rows="8"><?= htmlspecialchars($registro['historico']) ?></textarea>
+    <!-- HISTÓRICO ATUAL -->
+    <label class="label-block">HISTÓRICO ATUAL</label>
+    <textarea readonly
+        class="textarea-wide"
+        style="white-space:pre-wrap;">
+<?= htmlspecialchars($registro['historico']) ?>
+    </textarea>
 
-    <input type="hidden" name="historico_existente" 
+    <input type="hidden" name="historico_existente"
            value="<?= htmlspecialchars($registro['historico']) ?>">
 
-    <br><br>
+    <!-- NOVO REGISTRO -->
+    <label class="label-block">Adicionar novo</label>
+    <textarea name="novo_texto"
+        class="textarea-wide"
+        placeholder="Digite o complemento..."></textarea>
 
-    <label>Adicionar novo registro</label>
-    <small>(o texto será anexado ao histórico)</small>
-
-    <textarea name="novo_texto" rows="6" placeholder="Digite o complemento..."></textarea>
-
-    <br><br>
-
-    <button type="submit">Salvar</button>
-    <a href="lista_chamadas.php">Cancelar</a>
+    <div class="actions-row">
+        <button type="submit" class="pill pill-active">Salvar</button>
+        <a href="lista_chamadas.php" class="pill">Cancelar</a>
+    </div>
 
 </form>
 
+        </div>
+    </main>
+
+    <!-- RODAPÉ -->
+    <footer class="footer">
+        © <?= date('Y') ?> – Sistema Integrado
+    </footer>
+
+</div>
 </body>
 </html>
 
